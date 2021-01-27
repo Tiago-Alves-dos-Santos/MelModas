@@ -56,6 +56,7 @@ $("a#all_data_cliente").on('click', function(e){
         },
         success: function(e){
             $("#tabela-cliente").empty().html(e);
+            $("#tabela-telefone").empty().html("<h4>Selecione um cliente!</h4>");
         },
         error: function(e){
             console.log(e);
@@ -82,6 +83,7 @@ $("form#filtrar-cliente").on('submit', function(e){
         },
         success: function(e){
             $("#tabela-cliente").empty().html(e);
+            $("#tabela-telefone").empty().html("<h4>Selecione um cliente!</h4>");
         },
         error: function(e){
             console.log(e);
