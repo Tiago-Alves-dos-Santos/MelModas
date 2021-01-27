@@ -28,7 +28,7 @@
                     </div>
                     <div class="col-md-2 d-flex justify-content-start">
                         <label> </label>
-                        <a href="{{route('cliente.view.principal')}}" class="btn btn-primary btn-block" style="margin-top: 5px">Voltar</a>
+                        <a href="{{route('cliente.view.principal')}}" class="btn btn-primary btn-block" style="margin-top: 5px" id="all_data_cliente">Voltar</a>
                     </div>  
                 </div>
             </form>
@@ -44,10 +44,30 @@
 @include('includes.cliente.tabela_telefone')
 
 <script>
+//buscar todos os dados, todos os clientes
+$("a#all_data_cliente").on('click', function(e){
+    e.preventDefault();
+    $("div#load-page").fadeIn('fast');
+    $.ajax({
+        url: "{{route('cliente.view.principal')}}",
+        type: 'GET',
+        complete: function(e){
+            $("div#load-page").fadeOut('fast');
+        },
+        success: function(e){
+            $("#tabela-cliente").empty().html(e);
+        },
+        error: function(e){
+            console.log(e);
+        }
+    });
+});
+
 $("input#numero").on('keydown keyup', function(e){
     let tamanho = $(this).val();
     $("span#tamanho-numero").html(tamanho.length);
 });
+
 
 $("form#filtrar-cliente").on('submit', function(e){
     e.preventDefault();
