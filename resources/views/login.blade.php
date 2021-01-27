@@ -26,17 +26,19 @@
 @endcomponent
 </head>
 <body>
-	
+	@component('componentes.load')
+	@endcomponent
 	<div class="limiter">
 		<div class="container-login100">
 			<div class="wrap-login100">
-				<form class="login100-form validate-form">
+				<form class="login100-form validate-form" method="post" action="{{route('admin.login')}}" id="form-login">
+					@csrf
 					<span class="login100-form-title p-b-26" id="titulo-boas-vindas">
 						Bem Vindo!
 					</span>
 					<span class="login100-form-title p-b-48">
                         {{-- <i class="zmdi zmdi-font"></i> --}}
-                        <img src="https://source.unsplash.com/random/191x84" class="img-fluid"/>
+                        <img src="{{asset('img/logo.jpg')}}" class="img-fluid" style=""/>
 					</span>
 
 					<div class="wrap-input100 validate-input" data-validate = "E-mail inválido!">
@@ -99,8 +101,10 @@
 <!--===============================================================================================-->
     <script src="plugins/tela-login/js/main.js"></script>
     @component('componentes.footer')
-    <script src="{{asset('js/login.js')}}"></script>
+	<script src="{{asset('js/login.js')}}"></script>
     @endcomponent
 
+	@component('componentes.msgPhp')
+	@endcomponent
 </body>
 </html>

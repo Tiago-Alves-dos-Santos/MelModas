@@ -1,463 +1,119 @@
-<!DOCTYPE html>
-<html lang="pt_Br">
-<head>
-    @component('componentes.metatags')
-    @endcomponent
-    <title>Painel de Controle</title>
-	<!-- BOOTSTRAP STYLES-->
-    <link href="plugins/template-admin/assets/css/bootstrap.css" rel="stylesheet" />
-     <!-- FONTAWESOME STYLES-->
-    <link href="plugins/template-admin/assets/css/font-awesome.css" rel="stylesheet" />
-        <!-- CUSTOM STYLES-->
-    <link href="plugins/template-admin/assets/css/custom.css" rel="stylesheet" />
-     <!-- GOOGLE FONTS-->
-   <link href='http://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css' />
-</head>
-<body>
-     
-           
-          
-    <div id="wrapper">
-         <div class="navbar navbar-inverse navbar-fixed-top">
-            <div class="adjust-nav">
-                <div class="navbar-header">
-                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".sidebar-collapse">
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-                    </button>
-                    <a class="navbar-brand" href="#">
-                        <img src="plugins/template-admin/assets/img/logo.png" />
+@extends('layout.template_admin')
 
-                    </a>
-                    
-                </div>
-              
-                <span class="logout-spn" >
-                  <a href="#" style="color:#fff;">Sair</a>  
+@section('titulo', 'Painel Administrativo')
 
-                </span>
-            </div>
+
+@section('titulo_pagina', 'Painel Administrativo')
+
+
+@section('conteudo')
+<div class="row text-center pad-top">
+    <div class="col-lg-2 col-md-2 col-sm-2 col-xs-6">
+        <div class="div-square">
+            <a href="blank.html" >
+            <i class="fas fa-cash-register fa-5x"></i>
+            <h4>Abrir Venda</h4>
+            </a>
         </div>
-        <!-- /. NAV TOP  -->
-        <nav class="navbar-default navbar-side" role="navigation">
-            <div class="sidebar-collapse">
-                <ul class="nav" id="main-menu">
-                 
+    
+    
+    </div> 
 
-
-                    <li class="active-link">
-                        <a href="index.html" ><i class="fa fa-desktop "></i>Painel de Controle <span class="badge">Included</span></a>
-                    </li>
-                   
-
-                    <li>
-                        <a href="ui.html"><i class="fa fa-table "></i>UI Elements  <span class="badge">Included</span></a>
-                    </li>
-                    <li>
-                        <a href="blank.html"><i class="fa fa-edit "></i>Blank Page  <span class="badge">Included</span></a>
-                    </li>
-
-
-                    <li>
-                        <a href="#"><i class="fa fa-qrcode "></i>My Link One</a>
-                    </li>
-                    <li>
-                        <a href="#"><i class="fa fa-bar-chart-o"></i>My Link Two</a>
-                    </li>
-
-                    <li>
-                        <a href="#"><i class="fa fa-edit "></i>My Link Three </a>
-                    </li>
-                    <li>
-                        <a href="#"><i class="fa fa-table "></i>My Link Four</a>
-                    </li>
-                     <li>
-                        <a href="#"><i class="fa fa-edit "></i>My Link Five </a>
-                    </li>
-                    
-                </ul>
-                            </div>
-
-        </nav>
-        <!-- /. NAV SIDE  -->
-        <div id="page-wrapper" >
-            <div id="page-inner">
-                <div class="row">
-                    <div class="col-lg-12">
-                     <h2>ADMIN DASHBOARD</h2>   
-                    </div>
-                </div>              
-                 <!-- /. ROW  -->
-                  <hr />
-                <div class="row">
-                    <div class="col-lg-12 ">
-                        <div class="alert alert-info">
-                             <strong>Welcome Jhon Doe ! </strong> You Have No pending Task For Today.
-                        </div>
-                       
-                    </div>
-                    </div>
-                  <!-- /. ROW  --> 
-                            <div class="row text-center pad-top">
-                  <div class="col-lg-2 col-md-2 col-sm-2 col-xs-6">
-                      <div class="div-square">
-                           <a href="blank.html" >
- <i class="fa fa-circle-o-notch fa-5x"></i>
-                      <h4>Check Data</h4>
-                      </a>
-                      </div>
-                     
-                     
-                  </div> 
-                 
-                  <div class="col-lg-2 col-md-2 col-sm-2 col-xs-6">
-                      <div class="div-square">
-                           <a href="blank.html" >
- <i class="fa fa-envelope-o fa-5x"></i>
-                      <h4>Mail Box</h4>
-                      </a>
-                      </div>
-                     
-                     
-                  </div>
-                  <div class="col-lg-2 col-md-2 col-sm-2 col-xs-6">
-                      <div class="div-square">
-                           <a href="blank.html" >
- <i class="fa fa-lightbulb-o fa-5x"></i>
-                      <h4>New Issues</h4>
-                      </a>
-                      </div>
-                     
-                     
-                  </div>
-                  <div class="col-lg-2 col-md-2 col-sm-2 col-xs-6">
-                      <div class="div-square">
-                           <a href="blank.html" >
- <i class="fa fa-users fa-5x"></i>
-                      <h4>See Users</h4>
-                      </a>
-                      </div>
-                     
-                     
-                  </div>
-                  <div class="col-lg-2 col-md-2 col-sm-2 col-xs-6">
-                      <div class="div-square">
-                           <a href="blank.html" >
- <i class="fa fa-key fa-5x"></i>
-                      <h4>Admin </h4>
-                      </a>
-                      </div>
-                     
-                     
-                  </div>
-                  <div class="col-lg-2 col-md-2 col-sm-2 col-xs-6">
-                      <div class="div-square">
-                           <a href="blank.html" >
- <i class="fa fa-comments-o fa-5x"></i>
-                      <h4>Support</h4>
-                      </a>
-                      </div>
-                     
-                     
-                  </div>
-              </div>
-                 <!-- /. ROW  --> 
-                <div class="row text-center pad-top">
-                 
-                 <div class="col-lg-2 col-md-2 col-sm-2 col-xs-6">
-                      <div class="div-square">
-                           <a href="blank.html" >
- <i class="fa fa-clipboard fa-5x"></i>
-                      <h4>All Docs</h4>
-                      </a>
-                      </div>
-                     
-                     
-                  </div>
-                  <div class="col-lg-2 col-md-2 col-sm-2 col-xs-6">
-                      <div class="div-square">
-                           <a href="blank.html" >
- <i class="fa fa-gear fa-5x"></i>
-                      <h4>Settings</h4>
-                      </a>
-                      </div>
-                     
-                     
-                  </div>
-                  <div class="col-lg-2 col-md-2 col-sm-2 col-xs-6">
-                      <div class="div-square">
-                           <a href="blank.html" >
- <i class="fa fa-wechat fa-5x"></i>
-                      <h4>Live Talk</h4>
-                      </a>
-                      </div>
-                     
-                     
-                  </div>
-                  <div class="col-lg-2 col-md-2 col-sm-2 col-xs-6">
-                      <div class="div-square">
-                           <a href="blank.html" >
- <i class="fa fa-bell-o fa-5x"></i>
-                      <h4>Notifications </h4>
-                      </a>
-                      </div>
-                     
-                     
-                  </div>
-                  <div class="col-lg-2 col-md-2 col-sm-2 col-xs-6">
-                      <div class="div-square">
-                           <a href="blank.html" >
- <i class="fa fa-rocket fa-5x"></i>
-                      <h4>Launch</h4>
-                      </a>
-                      </div>
-                     
-                     
-                  </div>
-                     <div class="col-lg-2 col-md-2 col-sm-2 col-xs-6">
-                      <div class="div-square">
-                           <a href="blank.html" >
- <i class="fa fa-user fa-5x"></i>
-                      <h4>Register User</h4>
-                      </a>
-                      </div>
-                     
-                     
-                  </div> 
-              </div>   
-                  <!-- /. ROW  -->    
-                 <div class="row text-center pad-top">
-                   
-                 
-                  <div class="col-lg-2 col-md-2 col-sm-2 col-xs-6">
-                      <div class="div-square">
-                           <a href="blank.html" >
- <i class="fa fa-envelope-o fa-5x"></i>
-                      <h4>Mail Box</h4>
-                      </a>
-                      </div>
-                     
-                     
-                  </div>
-                  <div class="col-lg-2 col-md-2 col-sm-2 col-xs-6">
-                      <div class="div-square">
-                           <a href="blank.html" >
- <i class="fa fa-lightbulb-o fa-5x"></i>
-                      <h4>New Issues</h4>
-                      </a>
-                      </div>
-                     
-                     
-                  </div>
-                  <div class="col-lg-2 col-md-2 col-sm-2 col-xs-6">
-                      <div class="div-square">
-                           <a href="blank.html" >
- <i class="fa fa-users fa-5x"></i>
-                      <h4>See Users</h4>
-                      </a>
-                      </div>
-                     
-                     
-                  </div>
-                  <div class="col-lg-2 col-md-2 col-sm-2 col-xs-6">
-                      <div class="div-square">
-                           <a href="blank.html" >
- <i class="fa fa-key fa-5x"></i>
-                      <h4>Admin </h4>
-                      </a>
-                      </div>
-                     
-                     
-                  </div>
-                  <div class="col-lg-2 col-md-2 col-sm-2 col-xs-6">
-                      <div class="div-square">
-                           <a href="#" >
- <i class="fa fa-comments-o fa-5x"></i>
-                      <h4>Support</h4>
-                      </a>
-                      </div>
-                     
-                     
-                  </div>
-                     <div class="col-lg-2 col-md-2 col-sm-2 col-xs-6">
-                      <div class="div-square">
-                           <a href="blank.html" >
- <i class="fa fa-circle-o-notch fa-5x"></i>
-                      <h4>Check Data</h4>
-                      </a>
-                      </div>
-                     
-                     
-                  </div>
-              </div>
-                 <!-- /. ROW  -->  
-                 <div class="row text-center pad-top">
-                 <div class="col-lg-2 col-md-2 col-sm-2 col-xs-6">
-                      <div class="div-square">
-                           <a href="blank.html" >
- <i class="fa fa-rocket fa-5x"></i>
-                      <h4>Launch</h4>
-                      </a>
-                      </div>
-                     
-                     
-                  </div>
-                 <div class="col-lg-2 col-md-2 col-sm-2 col-xs-6">
-                      <div class="div-square">
-                           <a href="blank.html" >
- <i class="fa fa-clipboard fa-5x"></i>
-                      <h4>All Docs</h4>
-                      </a>
-                      </div>
-                     
-                     
-                  </div>
-                  <div class="col-lg-2 col-md-2 col-sm-2 col-xs-6">
-                      <div class="div-square">
-                           <a href="blank.html" >
- <i class="fa fa-gear fa-5x"></i>
-                      <h4>Settings</h4>
-                      </a>
-                      </div>
-                     
-                     
-                  </div>
-                  <div class="col-lg-2 col-md-2 col-sm-2 col-xs-6">
-                      <div class="div-square">
-                           <a href="blank.html" >
- <i class="fa fa-wechat fa-5x"></i>
-                      <h4>Live Talk</h4>
-                      </a>
-                      </div>
-                     
-                     
-                  </div>
-                  <div class="col-lg-2 col-md-2 col-sm-2 col-xs-6">
-                      <div class="div-square">
-                           <a href="blank.html" >
- <i class="fa fa-bell-o fa-5x"></i>
-                      <h4>Notifications </h4>
-                      </a>
-                      </div>
-                     
-                     
-                  </div>
-                  
-                     <div class="col-lg-2 col-md-2 col-sm-2 col-xs-6">
-                      <div class="div-square">
-                           <a href="blank.html" >
- <i class="fa fa-user fa-5x"></i>
-                      <h4>Register User</h4>
-                      </a>
-                      </div>
-                     
-                     
-                  </div> 
-              </div>   
-                  <!-- /. ROW  -->  
-                <div class="row text-center pad-top">
-                   
-                 
-                  
-                  <div class="col-lg-2 col-md-2 col-sm-2 col-xs-6">
-                      <div class="div-square">
-                           <a href="blank.html" >
- <i class="fa fa-lightbulb-o fa-5x"></i>
-                      <h4>New Issues</h4>
-                      </a>
-                      </div>
-                     
-                     
-                  </div>
-                  <div class="col-lg-2 col-md-2 col-sm-2 col-xs-6">
-                      <div class="div-square">
-                           <a href="blank.html" >
- <i class="fa fa-users fa-5x"></i>
-                      <h4>See Users</h4>
-                      </a>
-                      </div>
-                     
-                     
-                  </div>
-                  <div class="col-lg-2 col-md-2 col-sm-2 col-xs-6">
-                      <div class="div-square">
-                           <a href="blank.html" >
- <i class="fa fa-key fa-5x"></i>
-                      <h4>Admin </h4>
-                      </a>
-                      </div>
-                     
-                     
-                  </div>
-                  <div class="col-lg-2 col-md-2 col-sm-2 col-xs-6">
-                      <div class="div-square">
-                           <a href="blank.html" >
- <i class="fa fa-comments-o fa-5x"></i>
-                      <h4>Support</h4>
-                      </a>
-                      </div>
-                     
-                     
-                  </div>
-                     <div class="col-lg-2 col-md-2 col-sm-2 col-xs-6">
-                      <div class="div-square">
-                           <a href="blank.html" >
- <i class="fa fa-circle-o-notch fa-5x"></i>
-                      <h4>Check Data</h4>
-                      </a>
-                      </div>
-                     
-                     
-                  </div>
-                    <div class="col-lg-2 col-md-2 col-sm-2 col-xs-6">
-                      <div class="div-square">
-                           <a href="blank.html" >
- <i class="fa fa-envelope-o fa-5x"></i>
-                      <h4>Mail Box</h4>
-                      </a>
-                      </div>
-                     
-                     
-                  </div>
-              </div>
-                 <!-- /. ROW  -->   
-				  <div class="row">
-                    <div class="col-lg-12 ">
-					<br/>
-                        <div class="alert alert-danger">
-                             <strong>Want More Icons Free ? </strong> Checkout fontawesome website and use any icon <a target="_blank" href="http://fortawesome.github.io/Font-Awesome/icons/">Click Here</a>.
-                        </div>
-                       
-                    </div>
-                    </div>
-                  <!-- /. ROW  --> 
+    <div class="col-lg-2 col-md-2 col-sm-2 col-xs-6">
+        <div class="div-square">
+            <a href="blank.html" >
+            <i class="fa fa-clipboard fa-5x"></i>
+        <h4>Vendas Realizadas</h4>
+        </a>
+        </div>
+    
+    
     </div>
-             <!-- /. PAGE INNER  -->
-            </div>
-         <!-- /. PAGE WRAPPER  -->
-        </div>
-    <div class="footer">
-      
-    
-            <div class="row">
-                <div class="col-lg-12" >
-                    &copy;  2020 - {{date('Y')}} Mel Modas | Todos os direitos reservados a Tiago Alves- <a href="" style="color:#fff;" target="_blank">Telegram</a>
-                </div>
-            </div>
-        </div>
-          
 
-     <!-- /. WRAPPER  -->
-    <!-- SCRIPTS -AT THE BOTOM TO REDUCE THE LOAD TIME-->
-    <!-- JQUERY SCRIPTS -->
-    <script src="plugins/template-admin/assets/js/jquery-1.10.2.js"></script>
-      <!-- BOOTSTRAP SCRIPTS -->
-    <script src="plugins/template-admin/assets/js/bootstrap.min.js"></script>
-      <!-- CUSTOM SCRIPTS -->
-    <script src="plugins/template-admin/assets/js/custom.js"></script>
+    <div class="col-lg-2 col-md-2 col-sm-2 col-xs-6">
+        <div class="div-square">
+            <a href="blank.html" >
+            <i class="fas fa-cart-plus fa-5x"></i>
+        <h4>Cadastrar Produtos</h4>
+        </a>
+        </div>
     
-    @component('componentes.footer')
-    @endcomponent
-</body>
-</html>
+    
+    </div>
+
+    <div class="col-lg-2 col-md-2 col-sm-2 col-xs-6">
+        <div class="div-square">
+            <a href="{{route('cliente.view.cadastro')}}" >
+            <i class="fa fa-users fa-5x"></i>
+        <h4>Cadastrar Cliente</h4>
+        </a>
+        </div>
+    
+    
+    </div>
+
+    <div class="col-lg-2 col-md-2 col-sm-2 col-xs-6">
+        <div class="div-square">
+            <a href="{{route('cliente.view.principal')}}" >
+            <i class="fa fa-users fa-5x"></i>
+        <h4>Clientes </h4>
+        </a>
+        </div>
+    
+    
+    </div>
+    <div class="col-lg-2 col-md-2 col-sm-2 col-xs-6">
+        <div class="div-square">
+            <a href="blank.html" >
+            <i class="fas fa-shopping-cart fa-5x"></i>
+        <h4>Estoque</h4>
+        </a>
+        </div>
+    </div>
+
+</div>
+
+
+<div class="row text-center pad-top">
+    <div class="col-lg-2 col-md-2 col-sm-2 col-xs-6">
+    <div class="div-square">
+        <a href="blank.html" >
+            <i class="fas fa-bullhorn fa-5x"></i>
+    <h4>Promoção</h4>
+    </a>
+    </div>
+    
+    
+    </div> 
+
+    <div class="col-lg-2 col-md-2 col-sm-2 col-xs-6">
+    <div class="div-square">
+        <a href="blank.html" >
+            <i class="fas fa-receipt fa-5x"></i>
+    <h4>Notas Promissórias</h4>
+    </a>
+    </div>
+    
+    
+    </div>
+
+    <div class="col-lg-2 col-md-2 col-sm-2 col-xs-6">
+    <div class="div-square">
+        <a href="blank.html" >
+            <i class="fas fa-barcode fa-5x"></i>
+    <h4>Código de Barra</h4>
+    </a>
+    </div>
+    
+    
+    </div>
+
+
+</div>
+
+
+<!-- /. ROW  --> 
+</div>
+<!-- /. PAGE INNER  -->
+</div>
+@endsection

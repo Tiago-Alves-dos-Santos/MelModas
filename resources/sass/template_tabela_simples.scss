@@ -1,0 +1,28 @@
+div.scroll{
+    width: 100%;
+    overflow: auto;
+}
+table{
+    width: 100%;
+}
+table thead{
+    text-align: center;
+}
+table thead.orange tr{
+    background-color: $cor;
+    color: $texto_cor2;
+    font-weight: bold;
+}
+table tbody tr{
+    text-align: center;
+    background-color: $fundo;
+    cursor: pointer;
+    &:hover{
+        background-color: $cor2;
+        color:$texto_cor2;
+    }
+}
+table tbody tr.cliente-selecionado{
+    background-color: $cor2;
+    color:$texto_cor2;
+}

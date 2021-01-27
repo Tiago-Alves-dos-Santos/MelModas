@@ -14,5 +14,15 @@ class Telefone extends Model
     // const UPDATED_AT = 'updat';
     protected $guarded = [];
 
+    /****** Releacionamentos *******/
+
     /****** Atributos criados *******/
+
+    /****** Metodos criados *******/
+    public function verificarNumero($numero,$cliente_especifico = false)
+    {
+        if(!$cliente_especifico){
+            return Telefone::where('telefone', $numero)->exists();
+        }
+    }
 }

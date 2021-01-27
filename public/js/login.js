@@ -4,13 +4,13 @@ function boasVindas(){
     var data = new Date();
     let hora = data.getHours();
     let texto = $("#titulo-boas-vindas");
-    if(hora > 0 && hora < 6){
+    if(hora >= 0 && hora < 6){
         $(texto).html('Boa Madrugada!');
-    }else if(hora > 6 && hora < 12){
+    }else if(hora >= 6 && hora < 12){
         $(texto).html('Bom Dia!');
-    }else if(hora > 12 && hora < 18){
-        $(texto).html('Bom Tarde!');
-    }else if(hora > 18 && hora < 23){
+    }else if(hora >= 12 && hora < 18){
+        $(texto).html('Boa Tarde!');
+    }else if(hora >= 18 && hora < 23){
         $(texto).html('Boa Noite!');
     }
 }
@@ -21,7 +21,7 @@ $(function(){
     //esconde msg de caps lock ligado(fonte, caixa alta ativada)
     $("#login-caps-lock").hide();
     //verifica se caps lock ou shift é pressionado para mandar a msg
-    $(document).bind('keydown keyup',function (e) {
+    $(document).on('keydown keyup',function (e) {
         //verifca se CapsLock ou SHIFT esta ligado, retorna true ou false
         //para deixar apenas o Shift ou capsLock é so remover um dos dois
         //nesse caso é pq quero verficar os dois, se um dos dois esta ativo
@@ -33,5 +33,10 @@ $(function(){
             //capsLock desligado
             $("#login-caps-lock").fadeOut('slow');
         }
+    });
+
+    //load no form login
+    $("form#form-login").on('submit', function(e){
+        $("div#load-page").fadeIn('fast');
     });
 });
