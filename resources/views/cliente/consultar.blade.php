@@ -16,8 +16,10 @@
                         <input type="text" placeholder="Nome do Cliente" class="form-control" name="nome"/>
                     </div>
                     <div class="col-md-4">
-                        <label>Número(Celular):</label>
-                        <input id="numero" id="numero" type="text" name="telefone" class="form-control limpar telefone-mask" maxlength="16" minlength="16" placeholder="(11) 9 3333-4444"/>
+                        <label>Número(Celular):  
+                             <span id="tamanho-numero"> 0</span>/16 
+                        </label>
+                        <input id="numero" type="text" name="telefone" class="form-control limpar telefone-mask"  placeholder="(11) 9 3333-4444"/>
                     </div>
     
                     <div class="col-md-2 d-flex justify-content-start">
@@ -42,6 +44,11 @@
 @include('includes.cliente.tabela_telefone')
 
 <script>
+$("input#numero").on('keydown keyup', function(e){
+    let tamanho = $(this).val();
+    $("span#tamanho-numero").html(tamanho.length);
+});
+
 $("form#filtrar-cliente").on('submit', function(e){
     e.preventDefault();
     $("div#load-page").fadeIn('fast');
