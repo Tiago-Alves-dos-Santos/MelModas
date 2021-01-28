@@ -45,7 +45,7 @@ class ClienteC extends Controller
         if($request->ajax()){
             return view('includes.cliente.tabela_consultar', compact('clientes','registros','filtro'));
         }
-        return view('usuario.consulta', compact('config','usuarios','registros','filtro'));
+        return view('cliente.consultar', compact('clientes','registros','filtro'));
     }
 
     public function viewCadastro(Request $request)

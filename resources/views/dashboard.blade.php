@@ -32,7 +32,7 @@
 
     <div class="col-lg-2 col-md-2 col-sm-2 col-xs-6">
         <div class="div-square">
-            <a href="blank.html" >
+            <a href="{{route('produto.view.cadastro')}}" >
             <i class="fas fa-cart-plus fa-5x"></i>
         <h4>Cadastrar Produtos</h4>
         </a>
@@ -64,7 +64,7 @@
     </div>
     <div class="col-lg-2 col-md-2 col-sm-2 col-xs-6">
         <div class="div-square">
-            <a href="blank.html" >
+            <a href="{{route('produto.view.principal')}}" >
             <i class="fas fa-shopping-cart fa-5x"></i>
         <h4>Estoque</h4>
         </a>

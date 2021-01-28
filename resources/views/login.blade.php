@@ -42,7 +42,7 @@
 					</span>
 
 					<div class="wrap-input100 validate-input" data-validate = "E-mail inválido!">
-						<input class="input100" type="text" name="email">
+						<input class="input100" type="email" name="email" required>
                         <span class="focus-input100" data-placeholder="E-mail"></span>
                     </div>
 
@@ -50,7 +50,7 @@
 						<span class="btn-show-pass">
 							<i class="zmdi zmdi-eye"></i>
 						</span>
-						<input class="input100" type="password" name="senha">
+						<input class="input100" type="password" name="senha" required>
 						<span class="focus-input100" data-placeholder="Senha"></span>
                     </div>
                     

@@ -53,6 +53,19 @@ Route::group( [ 'prefix' => 'admin/cliente' ], function()
 
 });
 
+Route::group( [ 'prefix' => 'admin/produto' ], function()
+{
+    //tela principal produto
+    Route::get('/','Controller\ProdutoC@viewPrincipal')->name('produto.view.principal');
+    //view cadastro produto
+    Route::get('/cadastro', 'Controller\ProdutoC@viewCadastro')->name('produto.view.cadastro');
+    //ajax verificar se vai adicionar ou cadastrar produto
+    Route::post('/verficar-produto', 'Controller\ProdutoC@cadastrarAtualizar')->name('produto.ajax.cadastrarAtualizar');
+    //ajax cadastrar produto
+    Route::post('/cadastrar', 'Controller\ProdutoC@create')->name('produto.ajax.create');
+    //ajax adicionar produto - adicionar quantidade
+    Route::post('/adicionar-produto', 'Controller\ProdutoC@adicionarQuantidade')->name('produto.ajax.addQuantidade');
+});
 
 // Route::get('/iniciar', function () {
 //     App\Model\Usuario::create([
