@@ -15,7 +15,7 @@ div#produto-existente h3{
     <input type="hidden" name="id" value="{{$produto->id}}"/>
     <div class="form-row">
         <div class="col-md-12">
-            <label>Quantidade a ser adicionada:</label>
+            <label>Quantidade a ser adicionada: <span class="text-danger">*</span></label>
             <input type="number" name="quantidade" step="1" min="1" required class="form-control"/>
         </div>
     </div>
@@ -33,14 +33,15 @@ div#produto-existente h3{
             <div class="row">
                 <div class="col-md-6">
                     <ul style="list-style-type: none">
-                        <li>Código: {{$produto->codigo}}</li>
-                        <li>Qauntidade: {{$produto->quantidade}}</li>
+                        <li><span style="font-weight: bold">Código:</span> {{$produto->codigo}}</li>
+                        <li><span style="font-weight: bold">Marca:</span> {{$produto->marca}}</li>
+                        <li><span style="font-weight: bold">Quantidade:</span> {{$produto->quantidade}}</li>
                     </ul>
                 </div>
                 <div class="col-md-6">
                     <ul style="list-style-type: none">
-                        <li>Valor(Compra) R$: {{$produto->valor_compra}}</li>
-                        <li>Valor(Venda) R$: {{$produto->valor_venda}}</li>
+                        <li><span style="font-weight: bold">Valor(Compra) R$:</span> {{$produto->valor_compra}}</li>
+                        <li><span style="font-weight: bold">Valor(Venda) R$:</span> {{$produto->valor_venda}}</li>
                     </ul>
                 </div>
             </div>
@@ -53,6 +54,7 @@ div#produto-existente h3{
 </div>
 
 <script>
+//adicionar mais quantidade a um produto
 $("form#add-quantidade").on('submit', function(e){
     e.preventDefault();
     let dados = $(this).serialize();

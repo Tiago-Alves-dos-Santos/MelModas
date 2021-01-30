@@ -41,6 +41,7 @@
 </div>
 
 <script>
+//excluir telefone especifico    
 $("a.excluir-telefone").on('click', function(e){
     e.preventDefault();
     let id = $(this).attr('data-id-telefone');

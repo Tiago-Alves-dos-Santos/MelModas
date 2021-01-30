@@ -1,24 +1,28 @@
 <form method="POST" action="{{route('produto.ajax.create')}}" enctype="multipart/form-data" id="cadastrar-produto">
     @csrf
     <div class="form-row">
-        <div class="col-md-12">
-            <label>Nome:</label>
+        <div class="col-md-6">
+            <label>Nome: <span class="text-danger">*</span></label>
             <input type="text" name="nome" placeholder="Ex: Perfume, Blusa..." class="form-control" required/>
+        </div>
+        <div class="col-md-6">
+            <label>Marca: <span class="text-danger">*</span></label>
+            <input type="text" name="marca" placeholder="Ex: Natura, Lacoste..." class="form-control" required/>
         </div>
     </div>
     <div class="form-row">
         <div class="col-md-6">
-            <label>Valor(Compra):</label>
+            <label>Valor(Compra): <span class="text-danger">*</span></label>
             <input type="number" name="valor_compra" placeholder="35." class="form-control" min="1" step="0.01"/>
         </div>
         <div class="col-md-6">
-            <label>Valor(Venda):</label>
+            <label>Valor(Venda): <span class="text-danger">*</span></label>
             <input type="number" name="valor_venda" placeholder="35.50" class="form-control" required min="1" step="0.01"/>
         </div>
     </div>
     <div class="form-row">
         <div class="col-md-12">
-            <label>Quantidade:</label>
+            <label>Quantidade: <span class="text-danger">*</span></label>
             <input type="number" min="1" step="1" name="quantidade" placeholder="5" class="form-control" required/>
         </div>
     </div>
@@ -40,6 +44,7 @@
 </form>
 
 <script>
+//cadastrar um produto
 $("form#cadastrar-produto").on('submit', function(e){
     e.preventDefault();
     let codigo = $("input#codigo").val();

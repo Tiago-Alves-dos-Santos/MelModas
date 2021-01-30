@@ -24,6 +24,7 @@
 </div>
 
 <script>
+    //verificar se vai ocorre cadastro ou apenas um adicionamneto em uantidade do produto
     $("form#consultar-codigo").on('submit', function(e){
         e.preventDefault();
         let codigo = $("input#codigo").val();

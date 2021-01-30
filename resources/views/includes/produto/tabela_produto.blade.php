@@ -8,6 +8,7 @@
                             <td>#ID#</td>
                             <td>Código</td>
                             <td>Nome</td>
+                            <td>Marca</td>
                             <td>Valor(Compra)</td>
                             <td>Valor(Venda)</td>
                             <td>Quantidade</td>
@@ -20,18 +21,22 @@
                             <td>{{$produto->id}}</td>
                             <td>{{$produto->codigo}}</td>
                             <td>{{$produto->nome}}</td>
+                            <td>{{$produto->marca}}</td>
                             <td>{{$produto->valor_compra}}</td>
                             <td>{{$produto->valor_venda}}</td>
                             <td>{{$produto->quantidade}}</td>
                             <td>
-                                <a href="" 
+                                <a href="{{route('produto.view.alterar', [
+                                    'id' => base64_encode($produto->id),
+                                    'url' => base64_encode($produtos->currentPage())
+                                ])}}" 
                                 class="btn btn-sm btn-warning">Alterar</a>
-                            <a href="" data-id="{{$produto->id}}" class="btn btn-sm btn-danger excluir-cliente">Excluir</a>
+                            <a href="" data-id="{{$produto->id}}" class="btn btn-sm btn-danger excluir-produto">Excluir</a>
                             </td>
                         </tr>
                         @empty
                             <tr>
-                                <td colspan="7">Sem Produtos Cadastrados!</td>
+                                <td colspan="8">Sem Produtos Cadastrados!</td>
                             </tr>   
                         @endforelse
                     </tbody>
@@ -66,4 +71,96 @@
     </div>
     
     
-    </div>
+</div>
+
+<script>
+//colocar classe active no link clicado
+$('span.page-link').click(function () {
+    $('.pagination').find('.active').removeClass('active');
+    $(this).parent().addClass('active');
+});
+//paginação ajax
+$('.pagination .page-link').click(function (e) {
+    e.preventDefault();
+    $("div#load-page").fadeIn('fast');
+    let urls = $(this).attr('href');
+    $.ajax({
+        type: 'GET',
+        url: urls,
+        success: function (e) {
+            $("#tabela-produto").empty().html(e);
+        },
+        complete: function(e){
+            $("div#load-page").fadeOut('fast');
+        },
+        error: function (e) {
+
+        }
+    });
+});    
+//busca descrição de produto, atraves de um objeto produto retornado
+$("table#tabela-produtos tbody tr").on('dblclick', function(e){
+    let id = parseInt($(this).attr('data-id'));
+    $("table#tabela-produtos tbody tr").removeClass("selecionado");
+    $(this).addClass("selecionado");
+    $("div#load-page").fadeIn('fast');
+    $.ajax({
+        url: "{{route('produto.ajax.getProduto')}}",
+        type: 'POST',
+        data:{
+            "_token": "{{ csrf_token() }}",
+            "id": id
+        },
+        complete: function(e){
+            $("div#load-page").fadeOut('fast');
+        },
+        success: function(e){
+            let produto = JSON.parse(e);
+            $("div#descricao-produto").html(produto.descricao);
+        },
+        error: function(e){
+            console.log(e);
+        } 
+    });
+});
+//excluir produto
+$("a.excluir-produto").on('click', function(e){
+    e.preventDefault();
+    let id = $(this).attr('data-id');
+    $.msgbox({ 
+        'message' : 'Realmente deseja excluir esse produto?',
+        'type' : 'confirm', 
+        'buttons' : [
+            {'type' : 'yes', 'value': 'Sim'},
+            {'type' : 'no', 'value': 'Não'},
+            {'type' : 'close', 'value': 'Cancelar' }
+        ],
+        'callback' : function(result){
+            if(result){
+                $("div#load-page").fadeIn('fast');
+                $.ajax({
+                    url: "{{route('produto.ajax.delete')}}",
+                    type: 'POST',
+                    data:{
+                        "_token": "{{ csrf_token() }}",
+                        "id": id
+                    },
+                    complete: function(e){
+                        $("div#load-page").fadeOut('fast');
+                    },
+                    success: function(e){
+                        $.msgbox({
+                            'message': "Produto excluido com sucesso",
+                            'type': 'info'
+                        });
+                        $("#tabela-produto").empty().html(e);
+                    },
+                    error: function(e){
+                        console.log(e);
+                    }
+                });
+            }
+        } 
+    });
+});
+</script>

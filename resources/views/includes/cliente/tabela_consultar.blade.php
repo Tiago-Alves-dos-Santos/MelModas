@@ -130,11 +130,11 @@ $('.pagination .page-link').click(function (e) {
 });
 
 
-
+//buscar telefone e complemento apos selecionar cliente
 $("table#tabela-clientes tbody tr").on('dblclick',function(e){
     let id = parseInt($(this).attr('data-id'));
-    $("table#tabela-clientes tbody tr").removeClass("cliente-selecionado");
-    $(this).addClass("cliente-selecionado");
+    $("table#tabela-clientes tbody tr").removeClass("selecionado");
+    $(this).addClass("selecionado");
     $("input#cliente_id").val(id);
     $("div#load-page").fadeIn('fast');
     // mudar complemento
@@ -243,7 +243,7 @@ $("form#add_numero").on('submit', function(e){
         }
     });
 });
-
+//excluir cliente e seus telefones
 $("a.excluir-cliente").on('click', function(e){
     e.preventDefault();
     let id = $(this).attr('data-id');

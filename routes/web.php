@@ -59,14 +59,32 @@ Route::group( [ 'prefix' => 'admin/produto' ], function()
     Route::get('/','Controller\ProdutoC@viewPrincipal')->name('produto.view.principal');
     //view cadastro produto
     Route::get('/cadastro', 'Controller\ProdutoC@viewCadastro')->name('produto.view.cadastro');
+    //view alteração
+    Route::get('/alterar/{id}/{url}', 'Controller\ProdutoC@viewAlterar')->name('produto.view.alterar');
     //ajax verificar se vai adicionar ou cadastrar produto
     Route::post('/verficar-produto', 'Controller\ProdutoC@cadastrarAtualizar')->name('produto.ajax.cadastrarAtualizar');
     //ajax cadastrar produto
     Route::post('/cadastrar', 'Controller\ProdutoC@create')->name('produto.ajax.create');
+    //alterar produto
+    Route::post('/alterar', 'Controller\ProdutoC@alterar')->name('produto.alterar');
     //ajax adicionar produto - adicionar quantidade
     Route::post('/adicionar-produto', 'Controller\ProdutoC@adicionarQuantidade')->name('produto.ajax.addQuantidade');
+    //ajax retorna apenas um objeto produto
+    Route::post('/getProduto', 'Controller\ProdutoC@getProduto')->name('produto.ajax.getProduto');
+    //ajax filtrar produto
+    Route::post('/filtrar', 'Controller\ProdutoC@filtro')->name('produto.ajax.filtrar');
+    //ajax verficar codigo existente do produto
+    Route::post('/verificar-codigo', 'Controller\ProdutoC@verificarCodigo')->name('produto.ajax.verficarCodigo');
+    //deletar produto
+    Route::post('/deletar', 'Controller\ProdutoC@delete')->name('produto.ajax.delete');
+
 });
 
+Route::group( [ 'prefix' => 'admin/venda' ], function()
+{
+    //tela de efetuar venda
+    Route::get('/vender', 'Controller\ClienteProdutoC@viewVenda')->name('venda.view.venda');
+});
 // Route::get('/iniciar', function () {
 //     App\Model\Usuario::create([
 //         "nome" => "Tiago",

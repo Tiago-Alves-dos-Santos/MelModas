@@ -60,15 +60,13 @@ class ClienteC extends Controller
     }
     /************************** Operaçoes *********************************/
 
-    //pagina cliente.cadastro
-
     public function verficarExistencias(Request $request)
     {
         $cliente = new Cliente();
         $existe = $cliente->verificarExistencia($request->coluna, $request->valor);
         return json_encode($existe);
     }
-
+    //listar telfones de um cliente selecionado
     public function listarTelefones(Request $request)
     {
         $cliente= new Cliente();
@@ -76,7 +74,7 @@ class ClienteC extends Controller
         $telefones = $cliente->getTelefones();
         return view('includes.cliente.tabela_telefone', compact('telefones'));
     }
-    //retorna um atributo de um cliente
+    //retorna um atributo de um cliente, atraves de um objeto cliente
     public function getCliente(Request $request)
     {
         return json_encode(Cliente::find($request->id));
@@ -98,6 +96,7 @@ class ClienteC extends Controller
             return $this->listarTelefones($request);
         }
     }
+    //deletar telefone especifico
     public function deletarTelefone(Request $request)
     {
         $telefone = Telefone::find($request->id_telefone);
@@ -114,7 +113,7 @@ class ClienteC extends Controller
         }
     }
 
-    /************************** Backend *********************************/
+    /************************** CRUD *********************************/
     public function create(Request $request){
         $validacao = $request->validate([
             'nome' => 'required',
@@ -163,8 +162,8 @@ class ClienteC extends Controller
     public function delete(Request $request)
     {
         $cliente = Cliente::find($request->id_cliente);
-        Telefone::where('cliente_id', $cliente->id)->forceDelete();
-        $cliente->forceDelete();
+        Telefone::where('cliente_id', $cliente->id)->delete();
+        $cliente->delete();
         $clientes = $clientes = Cliente::orderBy('nome')->paginate(Configuracao::PAGINAS);;
         return view('includes.cliente.tabela_consultar', compact('clientes'));
     }
