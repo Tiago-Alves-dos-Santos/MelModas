@@ -12,7 +12,6 @@ class ClientePromocaoC extends Controller
     {
         $this->middleware('login');
     }
-
     /**********************************Ajax**********************************************/
     public function verficarPromocao(Request $request)
     {

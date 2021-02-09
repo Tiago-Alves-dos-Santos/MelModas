@@ -58,8 +58,19 @@ class ClienteC extends Controller
         $url = $request->url;
         return view('cliente.alterar', compact('cliente','url'));
     }
+    //aniversariantes
+    public function viewAniversarios(Request $request)
+    {
+        $clientesDay = Cliente::whereDay('data_nasc', '=', date('d'))->
+        whereMonth('data_nasc', date('m'))->get();
+        $clientesMont = Cliente::whereMonth('data_nasc', date('m'))->get();
+        return view('cliente.aniversarios', compact('clientesDay', 'clientesMont'));
+    }
     /************************** Operaçoes *********************************/
-
+    public function aniversariantesCount(Request $request)
+    {
+        return json_encode(Cliente::whereMonth('data_nasc', date('m'))->count());
+    }
     public function verficarExistencias(Request $request)
     {
         $cliente = new Cliente();

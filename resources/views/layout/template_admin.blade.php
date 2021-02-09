@@ -31,7 +31,7 @@
                         <span class="icon-bar"></span>
                     </button>
                     <a class="navbar-brand" href="#">
-                        <img src="{{asset('plugins/template-admin/assets/img/logo.png')}}" />
+                        <img src="{{asset('img/logo.jpg')}}" class="img-fluid" style="width:50px"/>
 
                     </a>
                     
@@ -59,11 +59,11 @@
                     </li>
                    
 
-                    <li>
+                    {{-- <li>
                         <a href="ui.html"><i class="fas fa-user"></i>Perfil </a>
-                    </li>
+                    </li> --}}
                     <li>
-                        <a href="blank.html"><i class="fas fa-calendar-day"></i> Aniversariantes  <span class="badge">4</span></a>
+                        <a href="{{route('cliente.view.viewAniversarios')}}"><i class="fas fa-calendar-day"></i> Aniversariantes  <span class="badge" id="aniversariantes-mes">0</span></a>
                     </li>
                     <li>
                         @if(isset($_SERVER['HTTP_REFERER']))
@@ -116,5 +116,22 @@
 
     @component('componentes.msgPhp')
     @endcomponent
+
+
+    <script>
+        
+    setInterval(function () {
+        $.ajax({
+            type: 'GET',
+            url: "{{route('cliente.ajax.aniversariantes')}}",
+            success: function(e){
+                $("span#aniversariantes-mes").html(e);
+            },
+            error: function(e){
+                console.log(e);
+            }
+        });
+    },1000);
+    </script>
 </body>
 </html>

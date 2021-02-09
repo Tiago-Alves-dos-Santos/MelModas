@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Controller;
 use App\Model\Cliente;
 use App\Model\Produto;
 use App\Model\Promocao;
+use App\Model\Telefone;
 use Illuminate\Http\Request;
 use App\Classes\Configuracao;
 use App\Model\ClienteProduto;
@@ -21,6 +22,85 @@ class ClienteProdutoC extends Controller
     public function viewVenda(Request $request)
     {
         return view('cliente-produto.venda');
+    }
+    //view da tela de vendas realizadas
+    public function viewVendas(Request $request)
+    {
+        $vendas = ClienteProduto::leftJoin('cliente', 'cliente_produto.cliente_id', '=', 'cliente.id')
+        ->leftJoin('produto', 'cliente_produto.produto_id', '=', 'produto.id')
+        ->select('cliente.nome','cliente.id as id_cliente','cliente_produto.*')
+        ->groupBy('cliente_produto.cliente_id','cliente_produto.created_at')
+        ->orderBy('cliente_produto.created_at', 'desc')
+        ->paginate(Configuracao::PAGINAS);
+        $telefones = [];
+        foreach($vendas as $item){
+            if(Telefone::where('cliente_id', $item->id_cliente)->exists()){
+                $numero = Telefone::where('cliente_id', $item->id_cliente)->first();
+                $telefones[] = $numero->telefone;
+            }else{
+                $telefones[] = "(??) ? ????-????";
+            }
+            
+        }
+        $registros = Configuracao::mapPaginate($vendas);
+        if($request->ajax()){
+            return view('includes.cliente_produto.lista_vendas',compact('vendas','telefones', 'registros'));
+        }
+       return view('cliente-produto.vendas_realizadas', compact('vendas','telefones','registros'));
+    }
+    //filtrr vendas ocorridas(ajax)
+    public function filtrar(Request $request)
+    {
+        $vendas = ClienteProduto::crossJoin('cliente')
+        ->leftJoin('produto', 'cliente_produto.produto_id', '=', 'produto.id')
+        ->crossJoin('telefone')
+        ->where('cliente.nome', 'like',"%{$request->nome}%")
+        ->whereDate('cliente_produto.created_at', 'like',"%{$request->datas}%")
+        ->where('telefone.telefone', 'like',"%{$request->telefone}%")
+        ->select('cliente.nome','cliente.id as id_cliente','cliente_produto.*')
+        ->groupBy('cliente_produto.cliente_id','cliente_produto.created_at')
+        ->orderBy('cliente_produto.created_at', 'desc')
+        ->paginate(Configuracao::PAGINAS);
+        // dd($vendas->toSql());
+        $telefones = [];
+        foreach($vendas as $item){
+            if(Telefone::where('cliente_id', $item->id_cliente)->exists()){
+                $numero = Telefone::where('cliente_id', $item->id_cliente)->first();
+                $telefones[] = $numero->telefone;
+            }else{
+                $telefones[] = "(??) ? ????-????";
+            }
+            
+        }
+        $filtro = $request->except(['_token']);
+        $registros = Configuracao::mapPaginate($vendas);
+        if($request->ajax()){
+            return view('includes.cliente_produto.lista_vendas',compact('vendas','telefones','filtro', 'registros'));
+        }
+       return view('cliente-produto.vendas_realizadas', compact('vendas','telefones','filtro', 'registros'));
+    }
+    //listar produtos da compra
+    public function listarProdutos(Request $request)
+    {
+        $vendas = ClienteProduto::leftJoin('cliente', 'cliente_produto.cliente_id', '=', 'cliente.id')
+        ->leftJoin('produto', 'cliente_produto.produto_id', '=', 'produto.id')
+        ->select('cliente.nome','cliente.id as id_cliente','cliente_produto.*', 'produto.*')
+        ->where('cliente_produto.cliente_id', $request->id)
+        ->where('cliente_produto.created_at', $request->data)
+        ->orderBy('cliente_produto.created_at', 'desc')
+        ->get();
+        // dd($vendas);
+        foreach($vendas as $value){
+            echo "<ul>";
+                echo "<li>Código: {$value->codigo}</li>";
+                echo "<li>Nome: {$value->nome}</li>";
+                echo "<li>Quantidade Vendida: {$value->quantidade_vendida}</li>";
+                echo "<li>Valor: R$ {$value->valor_venda}</li>";
+                echo "<li>Total: R$ ".$value->valor_venda * $value->quantidade_vendida."</li>";
+            echo "</ul>";
+            echo "<h3>=====================================</h3>";
+        }
+
     }
     /**********************************Ações Ajax*********************************************/
     //buscar clientes para selecionar um
@@ -107,7 +187,7 @@ class ClienteProdutoC extends Controller
             }else if($request->cliente_anonimo_nome != null){
                 DB::statement('SET FOREIGN_KEY_CHECKS=0;');
                 ClienteProduto::create([
-                    "cliente_id" => 0,
+                    "cliente_id" => null,
                     "produto_id" => $produto->id,
                     "valor_total" =>$valor_total,
                     "forma_pagamento" => $request->forma_pagamento,

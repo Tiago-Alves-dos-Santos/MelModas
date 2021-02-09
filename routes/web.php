@@ -52,6 +52,10 @@ Route::group( [ 'prefix' => 'admin/cliente' ], function()
     Route::post('/delete', 'Controller\ClienteC@delete')->name('cliente.delete');
     //listar telefones de cliente na hora de selecionar
     Route::get('/getTelefonesLista/{id}', 'Controller\ClienteC@getTelefonesLista')->name('cliente.getTelefonesLista');
+    //view Aniversarios
+    Route::get('/viewAniversarios', 'Controller\ClienteC@viewAniversarios')->name('cliente.view.viewAniversarios');
+    //coutn aniversariantes do mês(dia)
+    Route::get('/aniversariantesCount', 'Controller\ClienteC@aniversariantesCount')->name('cliente.ajax.aniversariantes');
 });
 
 Route::group( [ 'prefix' => 'admin/produto' ], function()
@@ -92,17 +96,25 @@ Route::group( [ 'prefix' => 'admin/venda' ], function()
     Route::post('/vender', 'Controller\ClienteProdutoC@vender')->name('venda.ajax.vender');
     //verficar se cliente tem promocao
     Route::post('/verficarPromocao', 'Controller\ClientePromocaoC@verficarPromocao')->name('venda.ajax.verficarPromocao');
+    //ver vendas realizadas
+    Route::any('/viewVendas', 'Controller\ClienteProdutoC@viewVendas')->name('venda.view.viewVendas');
+    //ver vendas realizadas filtro
+    Route::any('/viewVendas/filtro', 'Controller\ClienteProdutoC@filtrar')->name('venda.ajax.filtrar');
+    //listar Produtos
+    Route::get('/listarProdutos/{data}/{id?}', 'Controller\ClienteProdutoC@listarProdutos')->name('venda.listarProdutos');
 });
-Route::get('/iniciar', function () {
-    App\Model\Usuario::create([
-        "nome" => "Tiago",
-        "email" => "tiagoalves@email.com",
-        "senha" => "melmodas"
-    ]);
-});
-Route::get('/promocao', function () {
-    App\Model\Promocao::create([
-        "valor_atingir" => 300,
-        "desconto_porcento" => 10
-    ]);
-});
+
+//iniciar sistema
+// Route::get('/iniciar', function () {
+//     App\Model\Usuario::create([
+//         "nome" => "Tiago",
+//         "email" => "tiagoalves@email.com",
+//         "senha" => "melmodas"
+//     ]);
+// });
+// Route::get('/promocao', function () {
+//     App\Model\Promocao::create([
+//         "valor_atingir" => 300,
+//         "desconto_porcento" => 10
+//     ]);
+// });

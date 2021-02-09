@@ -21,7 +21,7 @@
 
     <div class="col-lg-2 col-md-2 col-sm-2 col-xs-6">
         <div class="div-square">
-            <a href="blank.html" >
+            <a href="{{route('venda.view.viewVendas')}}" >
             <i class="fa fa-clipboard fa-5x"></i>
         <h4>Vendas Realizadas</h4>
         </a>
@@ -75,37 +75,34 @@
 
 
 <div class="row text-center pad-top">
-    <div class="col-lg-2 col-md-2 col-sm-2 col-xs-6">
-    <div class="div-square">
-        <a href="blank.html" >
-            <i class="fas fa-bullhorn fa-5x"></i>
-    <h4>Promoção</h4>
-    </a>
-    </div>
+    {{-- <div class="col-lg-2 col-md-2 col-sm-2 col-xs-6">
+        <div class="div-square">
+            <a href="blank.html" >
+                <i class="fas fa-bullhorn fa-5x"></i>
+        <h4>Promoção</h4>
+        </a>
+        </div>
     
     
-    </div> 
+    </div>  --}}
+
+    {{-- <div class="col-lg-2 col-md-2 col-sm-2 col-xs-6">
+        <div class="div-square">
+            <a href="blank.html" >
+                <i class="fas fa-receipt fa-5x"></i>
+            <h4>Notas Promissórias</h4>
+            </a>
+        </div>
+    
+    </div> --}}
 
     <div class="col-lg-2 col-md-2 col-sm-2 col-xs-6">
-    <div class="div-square">
-        <a href="blank.html" >
-            <i class="fas fa-receipt fa-5x"></i>
-    <h4>Notas Promissórias</h4>
-    </a>
-    </div>
-    
-    
-    </div>
-
-    <div class="col-lg-2 col-md-2 col-sm-2 col-xs-6">
-    <div class="div-square">
-        <a href="blank.html" >
-            <i class="fas fa-barcode fa-5x"></i>
-    <h4>Código de Barra</h4>
-    </a>
-    </div>
-    
-    
+        <div class="div-square">
+            <a href="https://www.invertexto.com/codigo-barras-lote" target="_blank">
+                <i class="fas fa-barcode fa-5x"></i>
+        <h4>Código de Barra</h4>
+        </a>
+        </div>    
     </div>
 
 
