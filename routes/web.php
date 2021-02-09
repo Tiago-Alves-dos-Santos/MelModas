@@ -50,7 +50,8 @@ Route::group( [ 'prefix' => 'admin/cliente' ], function()
     Route::post('/deletarTelefone', 'Controller\ClienteC@deletarTelefone')->name('cliente.ajax.deletarTelefone');
     //deletar cliente
     Route::post('/delete', 'Controller\ClienteC@delete')->name('cliente.delete');
-
+    //listar telefones de cliente na hora de selecionar
+    Route::get('/getTelefonesLista/{id}', 'Controller\ClienteC@getTelefonesLista')->name('cliente.getTelefonesLista');
 });
 
 Route::group( [ 'prefix' => 'admin/produto' ], function()
@@ -77,18 +78,31 @@ Route::group( [ 'prefix' => 'admin/produto' ], function()
     Route::post('/verificar-codigo', 'Controller\ProdutoC@verificarCodigo')->name('produto.ajax.verficarCodigo');
     //deletar produto
     Route::post('/deletar', 'Controller\ProdutoC@delete')->name('produto.ajax.delete');
-
 });
 
 Route::group( [ 'prefix' => 'admin/venda' ], function()
 {
     //tela de efetuar venda
     Route::get('/vender', 'Controller\ClienteProdutoC@viewVenda')->name('venda.view.venda');
+    //retorna cliente buscado para selecionar em uma operação de venda
+    Route::any('/listar-clientes', 'Controller\ClienteProdutoC@getClientesSelect')->name('venda.ajax.getClientesSelect');
+    //adicionar produto a tabela de venda
+    Route::post('/addProduto', 'Controller\ClienteProdutoC@addProduto')->name('venda.ajax.addProduto');
+    //vender
+    Route::post('/vender', 'Controller\ClienteProdutoC@vender')->name('venda.ajax.vender');
+    //verficar se cliente tem promocao
+    Route::post('/verficarPromocao', 'Controller\ClientePromocaoC@verficarPromocao')->name('venda.ajax.verficarPromocao');
 });
-// Route::get('/iniciar', function () {
-//     App\Model\Usuario::create([
-//         "nome" => "Tiago",
-//         "email" => "tiagoalves@email.com",
-//         "senha" => "melmodas"
-//     ]);
-// });
+Route::get('/iniciar', function () {
+    App\Model\Usuario::create([
+        "nome" => "Tiago",
+        "email" => "tiagoalves@email.com",
+        "senha" => "melmodas"
+    ]);
+});
+Route::get('/promocao', function () {
+    App\Model\Promocao::create([
+        "valor_atingir" => 300,
+        "desconto_porcento" => 10
+    ]);
+});

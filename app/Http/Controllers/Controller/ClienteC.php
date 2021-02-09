@@ -112,7 +112,15 @@ class ClienteC extends Controller
             return 2;
         }
     }
-
+    /************************** Variados *********************************/
+    public function getTelefonesLista(Request $request)
+    {
+        $telefones = Telefone::where('cliente_id', $request->id)->get();
+        echo "<h1>Pressione <span style='color:red'>CTRL+F</span> para fazer uma busca nos numeros abaixo</h1>";
+        foreach ($telefones as $value) {
+            echo "<h4>{$value->telefone}</h4>";
+        }
+    }
     /************************** CRUD *********************************/
     public function create(Request $request){
         $validacao = $request->validate([

@@ -35,6 +35,10 @@ class ComposerStaticInitc83e6da9adac3d11f3f99d4e6a87a531
         array (
             'phpDocumentor\\Reflection\\' => 25,
         ),
+        'Y' => 
+        array (
+            'Yadakhov\\' => 9,
+        ),
         'X' => 
         array (
             'XdgBaseDir\\' => 11,
@@ -157,6 +161,10 @@ class ComposerStaticInitc83e6da9adac3d11f3f99d4e6a87a531
             0 => __DIR__ . '/..' . '/phpdocumentor/reflection-common/src',
             1 => __DIR__ . '/..' . '/phpdocumentor/reflection-docblock/src',
             2 => __DIR__ . '/..' . '/phpdocumentor/type-resolver/src',
+        ),
+        'Yadakhov\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/yadakhov/insert-on-duplicate-key/src',
         ),
         'XdgBaseDir\\' => 
         array (
@@ -434,6 +442,7 @@ class ComposerStaticInitc83e6da9adac3d11f3f99d4e6a87a531
     );
 
     public static $classMap = array (
+        'App\\Classes\\Configuracao' => __DIR__ . '/../..' . '/app/Classes/Configuracao.php',
         'App\\Console\\Kernel' => __DIR__ . '/../..' . '/app/Console/Kernel.php',
         'App\\Exceptions\\Handler' => __DIR__ . '/../..' . '/app/Exceptions/Handler.php',
         'App\\Http\\Controllers\\Auth\\ConfirmPasswordController' => __DIR__ . '/../..' . '/app/Http/Controllers/Auth/ConfirmPasswordController.php',
@@ -443,14 +452,31 @@ class ComposerStaticInitc83e6da9adac3d11f3f99d4e6a87a531
         'App\\Http\\Controllers\\Auth\\ResetPasswordController' => __DIR__ . '/../..' . '/app/Http/Controllers/Auth/ResetPasswordController.php',
         'App\\Http\\Controllers\\Auth\\VerificationController' => __DIR__ . '/../..' . '/app/Http/Controllers/Auth/VerificationController.php',
         'App\\Http\\Controllers\\Controller' => __DIR__ . '/../..' . '/app/Http/Controllers/Controller.php',
+        'App\\Http\\Controllers\\Controller\\ClienteC' => __DIR__ . '/../..' . '/app/Http/Controllers/Controller/ClienteC.php',
+        'App\\Http\\Controllers\\Controller\\ClienteProdutoC' => __DIR__ . '/../..' . '/app/Http/Controllers/Controller/ClienteProdutoC.php',
+        'App\\Http\\Controllers\\Controller\\ClientePromocaoC' => __DIR__ . '/../..' . '/app/Http/Controllers/Controller/ClientePromocaoC.php',
+        'App\\Http\\Controllers\\Controller\\NotaPromissoriaC' => __DIR__ . '/../..' . '/app/Http/Controllers/Controller/NotaPromissoriaC.php',
+        'App\\Http\\Controllers\\Controller\\ProdutoC' => __DIR__ . '/../..' . '/app/Http/Controllers/Controller/ProdutoC.php',
+        'App\\Http\\Controllers\\Controller\\PromocaoC' => __DIR__ . '/../..' . '/app/Http/Controllers/Controller/PromocaoC.php',
+        'App\\Http\\Controllers\\Controller\\TelefoneC' => __DIR__ . '/../..' . '/app/Http/Controllers/Controller/TelefoneC.php',
+        'App\\Http\\Controllers\\Controller\\UsuarioC' => __DIR__ . '/../..' . '/app/Http/Controllers/Controller/UsuarioC.php',
         'App\\Http\\Kernel' => __DIR__ . '/../..' . '/app/Http/Kernel.php',
         'App\\Http\\Middleware\\Authenticate' => __DIR__ . '/../..' . '/app/Http/Middleware/Authenticate.php',
         'App\\Http\\Middleware\\CheckForMaintenanceMode' => __DIR__ . '/../..' . '/app/Http/Middleware/CheckForMaintenanceMode.php',
         'App\\Http\\Middleware\\EncryptCookies' => __DIR__ . '/../..' . '/app/Http/Middleware/EncryptCookies.php',
+        'App\\Http\\Middleware\\Login' => __DIR__ . '/../..' . '/app/Http/Middleware/Login.php',
         'App\\Http\\Middleware\\RedirectIfAuthenticated' => __DIR__ . '/../..' . '/app/Http/Middleware/RedirectIfAuthenticated.php',
         'App\\Http\\Middleware\\TrimStrings' => __DIR__ . '/../..' . '/app/Http/Middleware/TrimStrings.php',
         'App\\Http\\Middleware\\TrustProxies' => __DIR__ . '/../..' . '/app/Http/Middleware/TrustProxies.php',
         'App\\Http\\Middleware\\VerifyCsrfToken' => __DIR__ . '/../..' . '/app/Http/Middleware/VerifyCsrfToken.php',
+        'App\\Model\\Cliente' => __DIR__ . '/../..' . '/app/Model/Cliente.php',
+        'App\\Model\\ClienteProduto' => __DIR__ . '/../..' . '/app/Model/ClienteProduto.php',
+        'App\\Model\\ClientePromocao' => __DIR__ . '/../..' . '/app/Model/ClientePromocao.php',
+        'App\\Model\\NotaPromissoria' => __DIR__ . '/../..' . '/app/Model/NotaPromissoria.php',
+        'App\\Model\\Produto' => __DIR__ . '/../..' . '/app/Model/Produto.php',
+        'App\\Model\\Promocao' => __DIR__ . '/../..' . '/app/Model/Promocao.php',
+        'App\\Model\\Telefone' => __DIR__ . '/../..' . '/app/Model/Telefone.php',
+        'App\\Model\\Usuario' => __DIR__ . '/../..' . '/app/Model/Usuario.php',
         'App\\Providers\\AppServiceProvider' => __DIR__ . '/../..' . '/app/Providers/AppServiceProvider.php',
         'App\\Providers\\AuthServiceProvider' => __DIR__ . '/../..' . '/app/Providers/AuthServiceProvider.php',
         'App\\Providers\\BroadcastServiceProvider' => __DIR__ . '/../..' . '/app/Providers/BroadcastServiceProvider.php',
@@ -4653,6 +4679,7 @@ class ComposerStaticInitc83e6da9adac3d11f3f99d4e6a87a531
         'Whoops\\Util\\SystemFacade' => __DIR__ . '/..' . '/filp/whoops/src/Whoops/Util/SystemFacade.php',
         'Whoops\\Util\\TemplateHelper' => __DIR__ . '/..' . '/filp/whoops/src/Whoops/Util/TemplateHelper.php',
         'XdgBaseDir\\Xdg' => __DIR__ . '/..' . '/dnoegel/php-xdg-base-dir/src/Xdg.php',
+        'Yadakhov\\InsertOnDuplicateKey' => __DIR__ . '/..' . '/yadakhov/insert-on-duplicate-key/src/InsertOnDuplicateKey.php',
         'phpDocumentor\\Reflection\\DocBlock' => __DIR__ . '/..' . '/phpdocumentor/reflection-docblock/src/DocBlock.php',
         'phpDocumentor\\Reflection\\DocBlockFactory' => __DIR__ . '/..' . '/phpdocumentor/reflection-docblock/src/DocBlockFactory.php',
         'phpDocumentor\\Reflection\\DocBlockFactoryInterface' => __DIR__ . '/..' . '/phpdocumentor/reflection-docblock/src/DocBlockFactoryInterface.php',

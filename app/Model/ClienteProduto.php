@@ -2,12 +2,15 @@
 
 namespace App\Model;
 
+use Illuminate\Support\Facades\DB;
+use Yadakhov\InsertOnDuplicateKey;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use Illuminate\Support\Facades\DB;
+
 class ClienteProduto extends Model
 {
     use SoftDeletes;
+    use InsertOnDuplicateKey;
     protected $table = 'cliente_produto';
     public $timestamps = true;
     protected $primaryKey = 'id'; 
