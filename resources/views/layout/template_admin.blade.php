@@ -63,7 +63,13 @@
                         <a href="ui.html"><i class="fas fa-user"></i>Perfil </a>
                     </li> --}}
                     <li>
-                        <a href="{{route('cliente.view.viewAniversarios')}}"><i class="fas fa-calendar-day"></i> Aniversariantes  <span class="badge" id="aniversariantes-mes">0</span></a>
+                        <a href="{{route('cliente.view.viewAniversarios')}}"><i class="fas fa-calendar-day"></i> Aniversariantes  
+                            <span class="badge" id="aniversariantes-mes">0</span>
+                            <span class="badge" id="aniversariantes-dia" style="background-color:orangered ">0</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{{route('relatorio.inicio')}}"><i class="fas fa-file-invoice-dollar"></i>Relatório </a>
                     </li>
                     <li>
                         @if(isset($_SERVER['HTTP_REFERER']))
@@ -72,7 +78,8 @@
                     </li>
                     
                 </ul>
-                            </div>
+                {{-- <h5>Vendas(cartão) concluidas hoje: <span id="concluido_hoje"></span></h5> --}}
+            </div>
 
         </nav>
 
@@ -83,7 +90,9 @@
             <div id="page-inner">
                 <div class="row">
                     <div class="col-lg-12">
-                     <h2>@yield('titulo_pagina')</h2>   
+                     <h2>@yield('titulo_pagina') <span class="text-success" id="total-venda"></span>
+                        <span class="text-danger" id="promocao"></span>
+                    </h2>   
                     </div>
                 </div>              
                  <!-- /. ROW  -->
@@ -125,13 +134,35 @@
             type: 'GET',
             url: "{{route('cliente.ajax.aniversariantes')}}",
             success: function(e){
-                $("span#aniversariantes-mes").html(e);
+                $("span#aniversariantes-mes").html(e+"m");
             },
             error: function(e){
                 console.log(e);
             }
         });
-    },1000);
+        $.ajax({
+            type: 'GET',
+            url: "{{route('cliente.ajax.aniversariantesDay')}}",
+            success: function(e){
+                $("span#aniversariantes-dia").html(e+"d");
+            },
+            error: function(e){
+                console.log(e);
+            }
+        });
+    },3000);
+
+    $.ajax({
+        type: 'GET',
+        url: "{{route('rotinas.ajax.vendasConcluidas')}}",
+        success: function(e){
+            // $("span#concluido_hoje").html(e);
+        },
+        error: function(e){
+             console.log(e);
+        }
+    });
+
     </script>
 </body>
 </html>

@@ -96,9 +96,6 @@ $("table#tabela-clientes tbody tr").on('dblclick',function(e){
     // $("div#load-page").fadeIn('fast');
     if($("input#cliente_anonimo").prop('checked')){
         $("input#cliente_anonimo").prop('checked',false);
-        $("input#cliente_anonimo_input").val("");
-        $("input#cliente_anonimo_input").prop('readonly', true);
-        $("input#cliente_anonimo_input").removeAttr('required');
     }
     //verficar se cliente tem promocao
     $.ajax({
@@ -109,11 +106,14 @@ $("table#tabela-clientes tbody tr").on('dblclick',function(e){
             "_token": "{{ csrf_token() }}",
         },
         success: function (e) {
-            if(e == "true"){
+            if(e == "false"){
                 $.msgbox({
-                'message': "O Cliente possui promoção",
+                'message': "O Cliente não possui promoção",
                 'type': "info",
                 });
+            }else{
+                promocao = JSON.parse(e);
+                $("span#promocao").html("Promoção: "+promocao.desconto_porcento+"%");
             }
         },
         error: function(e){

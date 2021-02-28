@@ -23,6 +23,29 @@
         </div>
     </div>
     <div class="form-row">
+        <div class="col-md-4">
+            <label for="">Forma de pagamento</label>
+            <select class="custom-select" name="forma_pagamento">
+                <option value="">Selecione</option>
+                <option value="A vista">A vista</option>
+                <option value="cartão">Cartão</option>
+                <option value="fiado">Fiado</option>
+            </select>
+        </div>
+        <div class="col-md-4">
+            <label for="">Estado venda</label>
+            <select class="custom-select" name="estado_venda">
+                <option value="">Selecione</option>
+                <option value="concluida">Concluida</option>
+                <option value="andamento">Em Andamento</option>
+            </select>
+        </div>
+        <div class="col-md-4">
+            <label>Validar Comprovante(código):</label>
+            <input type="number" min="1" name="codigo" class="form-control" placeholder="Ex: 1"/>
+        </div>
+    </div>
+    <div class="form-row">
         <div class="col-md-6">
             <input type="submit" class="btn btn-success btn-block" value="Buscar" style="margin-top: 20px; margin-bottom: 20px"/>
         </div>

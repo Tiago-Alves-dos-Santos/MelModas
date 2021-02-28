@@ -5,7 +5,8 @@
 <link rel="stylesheet" type="text/css" href="{{asset('plugins/alert/msgbox.css')}}"/>
 <link rel="stylesheet" type="text/css" href="{{mix('css/app.css')}}"/>
 <script src="{{asset('js/jquery.js')}}"></script>
-<script src="{{asset('plugins/ckeditor/ckeditor.js')}}" charset="utf-8"></script>
+<script src="{{asset('js/functions.js')}}"></script>
+{{-- <script src="{{asset('plugins/ckeditor/ckeditor.js')}}" charset="utf-8"></script> --}}
 <script>
 
 </script>    

@@ -13,6 +13,7 @@
         "fideloper/proxy": "^4.4",
         "laravel/framework": "^6.20",
         "laravel/tinker": "^2.5",
+        "picqer/php-barcode-generator": "^2.1",
         "yadakhov/insert-on-duplicate-key": "^1.2"
     },
     "require-dev": {

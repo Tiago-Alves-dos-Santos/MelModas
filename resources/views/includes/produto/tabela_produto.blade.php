@@ -153,7 +153,8 @@ $("a.excluir-produto").on('click', function(e){
                             'message': "Produto excluido com sucesso",
                             'type': 'info'
                         });
-                        $("#tabela-produto").empty().html(e);
+                        getRouteAjax("{{route('produto.view.principal')}}", "#tabela-produto", "{{$produtos->currentPage()}}");
+                        // $("#tabela-produto").empty().html(e);
                     },
                     error: function(e){
                         console.log(e);

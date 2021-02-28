@@ -17,10 +17,12 @@ class Login
     {
         if (session()->has('login') == false || !session('login')) {
             //cria uma msg vazia ou null, nenhuma msg de aviso é criada
-                session(['msg' => [
-                    'tipo' => 'alerta',
-                    'texto' => 'Realize o login para ter acesso ao sistema!'
-                ]]);
+                if(session()->has('msg') == false){
+                    session(['msg' => [
+                        'tipo' => 'alerta',
+                        'texto' => 'Realize o login para ter acesso ao sistema!'
+                    ]]);
+                }
             //
             return redirect()->route('inicio');
         }

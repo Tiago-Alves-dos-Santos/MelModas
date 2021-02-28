@@ -55,7 +55,6 @@
                         <input style="cursor: pointer"  type="checkbox" class="custom-control-input" id="cliente_anonimo">
                         <label class="custom-control-label" style="cursor: pointer" for="cliente_anonimo">Cliente não cadastrado</label>
                       </div>
-                    <input type="text" id="cliente_anonimo_input" class="form-control" placeholder="Ex: Cliente Nome" style="margin-bottom: 10px" readonly/>
                 </div>
             </div>
             <div class="form-row">
@@ -71,7 +70,9 @@
           </fieldset>
           <fieldset>
             <h2>Lista de Produtos - <span class="text-success">Total:</span>
-                <span class="text-success" id="total-venda"></span></h2>
+                <span class="text-success" id="total-venda"></span>
+                <span class="text-danger" id="promocao"></span>
+            </h2>
             <div class="form-row">
                 <div class="col-md-4">
                     <label>Código</label>
@@ -117,10 +118,10 @@
                 <div class="col-md-6">
                     <label for="mob">Forma de Pagamento</label>
                     <select class="custom-select" id="forma_pagamento">
-                        <option>Selecione a forma de pagamento</option>
-                        <option>A Vista</option>
-                        <option>Cartão</option>
-                        <option>Fiado</option>
+                        <option value="">Selecione a forma de pagamento</option>
+                        <option value="A vista">A Vista</option>
+                        <option value="cartão">Cartão</option>
+                        <option value="fiado">Fiado</option>
                     </select>
                 </div>
                 <div class="col-md-4">
@@ -129,7 +130,7 @@
                 </div>
                 <div class="col-md-2">
                     <label>Parcelamento em:</label>
-                    <input type="number" id="parcelamento" placeholder="12" class="form-control" max="12" step="1"/>
+                    <input type="number" id="parcelamento" placeholder="12" class="form-control" max="12" min="2" step="1"/>
                 </div>
             </div>
             <div class="form-row">
@@ -188,20 +189,17 @@ $("a#buscarCliente").on('click', function(e){
     });
 });
 //verficar se e um cliente anonimo
+let id_cliente = null;
 $("input#cliente_anonimo").on('click', function(e){
     if($(this).prop('checked')){
-        $("input#cliente_anonimo_input").val("");
-        $("input#cliente_anonimo_input").removeAttr('readonly');
-        $("input#cliente_anonimo_input").attr('required',"");
-        $("input#cliente_anonimo_input").focus();
         //retira caso exista algum cliente selecionado
         $("table#tabela-clientes tbody tr").removeClass("selecionado");
         $("input#id_cliente").val(0);
+        id_cliente = 1;
     }else{
-        $("input#cliente_anonimo_input").val("");
-        $("input#cliente_anonimo_input").prop('readonly', true);
-        $("input#cliente_anonimo_input").removeAttr('required');
+        id_cliente = 0;
     }
+    $("input#id_cliente").val(id_cliente);
 });
 
 //configurar leitor para tirar o submit
@@ -332,6 +330,9 @@ $("form#form_vender").on('submit', function(e){
     //campos variados
     let valor_recebido = $("input#valor_recebido").val();
     let parcelamento = $("input#parcelamento").val();
+    if(parcelamento == null){
+        parcelamento = 0;
+    }
     let desconto = $("input#desconto").val();
     let descricao = $("#descricao").val();
     let forma_pagamento = $("select#forma_pagamento").val();

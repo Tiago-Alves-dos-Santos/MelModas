@@ -11,9 +11,7 @@
 |
 */
 
-Route::get('/', function () {
-    return view('login');
-})->name('inicio');
+Route::get('/', 'Controller\UsuarioC@viewLogin')->name('inicio');
 
 Route::group( [ 'prefix' => 'admin' ], function()
 {
@@ -56,6 +54,8 @@ Route::group( [ 'prefix' => 'admin/cliente' ], function()
     Route::get('/viewAniversarios', 'Controller\ClienteC@viewAniversarios')->name('cliente.view.viewAniversarios');
     //coutn aniversariantes do mês(dia)
     Route::get('/aniversariantesCount', 'Controller\ClienteC@aniversariantesCount')->name('cliente.ajax.aniversariantes');
+    //count aniversariantes do dia
+    Route::get('/aniversariantesDayCount', 'Controller\ClienteC@aniversariantesDayCount')->name('cliente.ajax.aniversariantesDay');
 });
 
 Route::group( [ 'prefix' => 'admin/produto' ], function()
@@ -102,8 +102,33 @@ Route::group( [ 'prefix' => 'admin/venda' ], function()
     Route::any('/viewVendas/filtro', 'Controller\ClienteProdutoC@filtrar')->name('venda.ajax.filtrar');
     //listar Produtos
     Route::get('/listarProdutos/{data}/{id?}', 'Controller\ClienteProdutoC@listarProdutos')->name('venda.listarProdutos');
+    //emitir comprovante de venda
+    Route::get('/comprovanteVenda/{id}/{nome}/{data}', 'Controller\ClienteProdutoC@comprovanteVenda')->name('venda.comprovanteVenda');
+    //venda nunca ocorridas
+    Route::post('/resetarVenda', 'Controller\ClienteProdutoC@resetarVenda')->name('venda.ajax.resetarVenda');
+    //concluir venda fiado que esta em andamento
+    Route::post('/concluirVenda', 'Controller\ClienteProdutoC@concluirVenda')->name('venda.ajax.concluirVenda');
 });
-
+Route::group( [ 'prefix' => 'admin/promocao' ], function()
+{
+    //view principal promocao
+    Route::get('/', 'Controller\PromocaoC@viewPrincipal')->name('promocao.view.principal');
+    //calcular valor total obitdo(por compra) por um cliente durante o mes
+    Route::get('/valorTotalMes', 'Controller\PromocaoC@valorTotalMes')->name('promocao.ajax.valorTotalMes');
+    //view Editar promoção
+    Route::get('/viewEditar', 'Controller\PromocaoC@viewEditar')->name('promocao.ajax.viewEditar');
+    //alterar promocao
+    Route::post('/alterar', 'Controller\PromocaoC@alterar')->name('promocao.alterar');
+});
+Route::group( [ 'prefix' => 'admin/relatorio' ], function()
+{
+    Route::get('/', 'Controller\RelatorioC@viewRelatorio')->name('relatorio.inicio');
+    Route::post('/emitirRelatorio', 'Controller\RelatorioC@emitirRelatorio')->name('relatorio.emitirRelatorio');
+});
+Route::group( [ 'prefix' => 'admin/rotinas' ], function()
+{
+    Route::get('/vendasConcluidas', 'Controller\RotinasC@vendasConcluidas')->name('rotinas.ajax.vendasConcluidas');
+});
 //iniciar sistema
 // Route::get('/iniciar', function () {
 //     App\Model\Usuario::create([
@@ -112,9 +137,9 @@ Route::group( [ 'prefix' => 'admin/venda' ], function()
 //         "senha" => "melmodas"
 //     ]);
 // });
-// Route::get('/promocao', function () {
-//     App\Model\Promocao::create([
-//         "valor_atingir" => 300,
-//         "desconto_porcento" => 10
-//     ]);
-// });
+Route::get('/promocao', function () {
+    App\Model\Promocao::create([
+        "valor_atingir" => 4300,
+        "desconto_porcento" => 10
+    ]);
+});

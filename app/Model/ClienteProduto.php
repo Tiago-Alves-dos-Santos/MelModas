@@ -19,4 +19,5 @@ class ClienteProduto extends Model
     protected $guarded = [];
 
     /****** Atributos criados *******/
+
 }

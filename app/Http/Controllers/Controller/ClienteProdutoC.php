@@ -6,6 +6,7 @@ use App\Model\Cliente;
 use App\Model\Produto;
 use App\Model\Promocao;
 use App\Model\Telefone;
+use PDF;
 use Illuminate\Http\Request;
 use App\Classes\Configuracao;
 use App\Model\ClienteProduto;
@@ -51,17 +52,19 @@ class ClienteProdutoC extends Controller
     //filtrr vendas ocorridas(ajax)
     public function filtrar(Request $request)
     {
-        $vendas = ClienteProduto::crossJoin('cliente')
-        ->leftJoin('produto', 'cliente_produto.produto_id', '=', 'produto.id')
-        ->crossJoin('telefone')
+        $vendas = ClienteProduto::join('cliente', 'cliente_produto.cliente_id', '=', 'cliente.id')
+        ->join('produto','cliente_produto.produto_id', '=', 'produto.id')
+        ->join('telefone','cliente.id', '=', 'telefone.cliente_id')
         ->where('cliente.nome', 'like',"%{$request->nome}%")
-        ->whereDate('cliente_produto.created_at', 'like',"%{$request->datas}%")
         ->where('telefone.telefone', 'like',"%{$request->telefone}%")
+        ->where('forma_pagamento','like',"%{$request->forma_pagamento}%")
+        ->where('cliente_produto.estado_compra','like',"%{$request->estado_venda}%")
+        ->where('cliente_produto.created_at','like',"%{$request->datas}%")
+        ->where('cliente_produto.id','like',"%{$request->codigo}%")
         ->select('cliente.nome','cliente.id as id_cliente','cliente_produto.*')
         ->groupBy('cliente_produto.cliente_id','cliente_produto.created_at')
         ->orderBy('cliente_produto.created_at', 'desc')
         ->paginate(Configuracao::PAGINAS);
-        // dd($vendas->toSql());
         $telefones = [];
         foreach($vendas as $item){
             if(Telefone::where('cliente_id', $item->id_cliente)->exists()){
@@ -82,8 +85,8 @@ class ClienteProdutoC extends Controller
     //listar produtos da compra
     public function listarProdutos(Request $request)
     {
-        $vendas = ClienteProduto::leftJoin('cliente', 'cliente_produto.cliente_id', '=', 'cliente.id')
-        ->leftJoin('produto', 'cliente_produto.produto_id', '=', 'produto.id')
+        $vendas = ClienteProduto::join('cliente', 'cliente_produto.cliente_id', '=', 'cliente.id')
+        ->join('produto', 'cliente_produto.produto_id', '=', 'produto.id')
         ->select('cliente.nome','cliente.id as id_cliente','cliente_produto.*', 'produto.*')
         ->where('cliente_produto.cliente_id', $request->id)
         ->where('cliente_produto.created_at', $request->data)
@@ -132,11 +135,11 @@ class ClienteProdutoC extends Controller
         $cliente = null;
         $promocao = false;
         //verfica se cliente nao foi selecionado
-        if($request->cliente_id == null && $request->cliente_anonimo_nome == null){
+        if($request->cliente_id == null || $request->cliente_id == 0){
             return json_encode("erro 1");
         }else if(!is_array($request->codigos) || (is_array($request->codigos) && count($request->codigos) == 0)){//verfica se produto foi selecionado
             return json_encode("erro 2");
-        }else if($request->cliente_id != null && $request->cliente_anonimo_nome == null){//caso cliente seja selecionado
+        }else if($request->cliente_id != null && $request->cliente_id > 1){//caso cliente seja selecionado
             //pega o valor total que aquele cliente gastou no mes atual desse ano
             $promocao = ClientePromocao::verficarPromocao($request);
         }
@@ -144,12 +147,15 @@ class ClienteProdutoC extends Controller
         $codigos = $request->codigos;
         //quantidade a ser vendida, respetiva aoa array de codigos
         $valores = $request->quantidade_vendas;
+
+        $valor_bruto = [];
         //percorre todos os codigos
         for($i=0; $i < count($codigos); $i++){
             //retorna o produto de acordo com codigo
             $alterar = Produto::where('codigo', $codigos[$i])->first();
             //diminui a quantidade do produto de acordo com a qauntidade a ser vendida
             $alterar->quantidade = ((int) $valores[$i]) - $alterar->quantidade;
+            $valor_bruto[] += $alterar->valor_compra * (int)$valores[$i];
             if($alterar->quantidade < 0){
                 $alterar->quantidade *= (-1);
             }
@@ -166,48 +172,103 @@ class ClienteProdutoC extends Controller
             $valor_total = $request->valor_total;
         }
 
+        if($request->valor_recebido < $valor_total){
+            return json_encode("erro 3");
+        }
+
         // $codigos_unicos = array_unique($codigos, SORT_REGULAR);
         $cont = 0;
         foreach ($codigos as $value) {
             $produto = Produto::where('codigo', $value)->first();
-            if($request->cliente_id != null && $request->cliente_anonimo_nome == null){
-                DB::statement('SET FOREIGN_KEY_CHECKS=0;');
-                ClienteProduto::create([
-                    "cliente_id" => $request->cliente_id,
-                    "produto_id" => $produto->id,
-                    "valor_total" =>$valor_total,
-                    "forma_pagamento" => $request->forma_pagamento,
-                    "parcelamento" => $request->parcelamento,
-                    "estado_compra" => "concluida",
-                    "quantidade_vendida" => $valores[$cont++],
-                    "descricao" => $request->descricao,
-                    "cliente_anonimo" => ""
-                ]);
-                DB::statement('SET FOREIGN_KEY_CHECKS=1;');
-            }else if($request->cliente_anonimo_nome != null){
-                DB::statement('SET FOREIGN_KEY_CHECKS=0;');
-                ClienteProduto::create([
-                    "cliente_id" => null,
-                    "produto_id" => $produto->id,
-                    "valor_total" =>$valor_total,
-                    "forma_pagamento" => $request->forma_pagamento,
-                    "parcelamento" => $request->parcelamento,
-                    "estado_compra" => "concluida",
-                    "quantidade_vendida" => $valores[$cont++],
-                    "descricao" => $request->descricao,
-                    "cliente_anonimo" => $request->cliente_anonimo_nome
-                ]);
-                DB::statement('SET FOREIGN_KEY_CHECKS=1;');
+            $estado_venda = null;
+            if($request->parcelamento == null){
+                $request->parcelamento =0;
             }
+
+            if($request->forma_pagamento == "cartão" && $request->parcelamento > 0){
+                $estado_venda = "andamento";
+            }else if($request->forma_pagamento == "fiado"){
+                $estado_venda = "andamento";
+            }else if ($request->forma_pagamento == "A vista" || ($request->forma_pagamento == "cartão" && $request->parcelamento == 0 )) {
+                $estado_venda = "concluida";
+            }
+            DB::statement('SET FOREIGN_KEY_CHECKS=0;');
+            ClienteProduto::create([
+                "cliente_id" => $request->cliente_id,
+                "produto_id" => $produto->id,
+                "valor_total" =>$valor_total,
+                "valor_bruto" => $valor_bruto[$cont],
+                "forma_pagamento" => $request->forma_pagamento,
+                "parcelamento" => $request->parcelamento,
+                "estado_compra" => $estado_venda,
+                "quantidade_vendida" => $valores[$cont++],
+                "descricao" => $request->descricao,
+                "cliente_anonimo" => ""
+            ]);
+            DB::statement('SET FOREIGN_KEY_CHECKS=1;');
         }
-        ClientePromocao::verficarPromocao($request); 
+        
+
+        if($request->cliente_id != null && $request->cliente_id > 1){
+            ClientePromocao::verficarPromocao($request); 
+        }
         if($request->valor_recebido >= $valor_total){
             return json_encode(($request->valor_recebido - $valor_total));
-        }else if($request->valor_recebido < $valor_total){
-            return json_encode("erro 3");
         }
         //falta desabilitar foreng keys
         
+    }
+    //emitir comprovante de venda
+    public function comprovanteVenda(Request $request)
+    {
+        $vendas = ClienteProduto::leftJoin('cliente', 'cliente_produto.cliente_id', '=', 'cliente.id')
+        ->leftJoin('produto', 'cliente_produto.produto_id', '=', 'produto.id')
+        ->select('cliente.nome','cliente.id as id_cliente','cliente_produto.*', 'produto.*')
+        ->where('cliente_produto.cliente_id', $request->id)
+        ->where('cliente_produto.created_at', $request->data)
+        ->orderBy('cliente_produto.created_at', 'desc')
+        ->get();
+        $cliente = Cliente::find($request->id);
+        $pdf = PDF::loadView('cliente-produto.comprovante_pdf', compact('vendas', 'cliente'));
+        $pdf->setPaper('A6', 'portrait');
+        return $pdf->stream('comprovante_venda.pdf');
+    }
+    //resetar venda, venda não ocorrida
+    public function resetarVenda(Request $request)
+    {
+        $vendas = ClienteProduto::join('cliente', 'cliente_produto.cliente_id', '=', 'cliente.id')
+        ->join('produto', 'cliente_produto.produto_id', '=', 'produto.id')
+        ->select('cliente.nome','cliente.id as id_cliente','cliente_produto.id as id_venda','cliente_produto.*', 'produto.*')
+        ->where('cliente_produto.cliente_id', $request->id)
+        ->where('cliente_produto.created_at', $request->dia)
+        ->orderBy('cliente_produto.created_at', 'desc')
+        ->get();
+        // dd($vendas);
+        foreach($vendas as $value){
+            $produto = Produto::where('codigo', $value->codigo)->first();
+            $produto->quantidade += $value->quantidade_vendida;
+            $produto->save();
+            ClienteProduto::where('id', $value->id_venda)->forceDelete();
+        }
+        return json_encode(true);
+    }
+    public function concluirVenda(Request $request)
+    {
+        $vendas = ClienteProduto::join('cliente', 'cliente_produto.cliente_id', '=', 'cliente.id')
+        ->join('produto', 'cliente_produto.produto_id', '=', 'produto.id')
+        ->select('cliente.nome','cliente.id as id_cliente','cliente_produto.id as id_venda','cliente_produto.*', 'produto.*')
+        ->where('cliente_produto.cliente_id', $request->id)
+        ->where('cliente_produto.created_at', $request->dia)
+        ->orderBy('cliente_produto.created_at', 'desc')
+        ->get();
+        // dd($vendas);
+        foreach($vendas as $value){
+
+            ClienteProduto::where('id', $value->id_venda)->update([
+                "estado_compra" => "concluida"
+            ]);
+        }
+        return json_encode(true);
     }
     /**********************************Crud*********************************************/
 }

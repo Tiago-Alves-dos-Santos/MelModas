@@ -75,16 +75,16 @@
 
 
 <div class="row text-center pad-top">
-    {{-- <div class="col-lg-2 col-md-2 col-sm-2 col-xs-6">
+    <div class="col-lg-2 col-md-2 col-sm-2 col-xs-6">
         <div class="div-square">
-            <a href="blank.html" >
+            <a href="{{route('promocao.view.principal')}}" >
                 <i class="fas fa-bullhorn fa-5x"></i>
         <h4>Promoção</h4>
         </a>
         </div>
     
     
-    </div>  --}}
+    </div> 
 
     {{-- <div class="col-lg-2 col-md-2 col-sm-2 col-xs-6">
         <div class="div-square">

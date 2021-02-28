@@ -71,6 +71,10 @@ class ClienteC extends Controller
     {
         return json_encode(Cliente::whereMonth('data_nasc', date('m'))->count());
     }
+    public function aniversariantesDayCount(Request $request)
+    {
+        return json_encode(Cliente::whereMonth('data_nasc', date('m'))->whereDay('data_nasc', date('d'))->count());
+    }
     public function verficarExistencias(Request $request)
     {
         $cliente = new Cliente();
@@ -99,6 +103,8 @@ class ClienteC extends Controller
         $cliente = new Cliente();
         if($cliente->verificarExistencia('telefone', $request->telefone_add)){
             return 2;
+        } else if($request->id_cliente == 1){
+            return 3;
         }else{
             Telefone::create([
                 "cliente_id" => $request->id_cliente,
@@ -183,7 +189,8 @@ class ClienteC extends Controller
         $cliente = Cliente::find($request->id_cliente);
         Telefone::where('cliente_id', $cliente->id)->delete();
         $cliente->delete();
-        $clientes = $clientes = Cliente::orderBy('nome')->paginate(Configuracao::PAGINAS);;
-        return view('includes.cliente.tabela_consultar', compact('clientes'));
+        $clientes = Cliente::orderBy('nome')->paginate(Configuracao::PAGINAS);
+        $registros = Configuracao::mapPaginate($clientes);
+        return view('includes.cliente.tabela_consultar', compact('clientes', 'registros'));
     }
 }

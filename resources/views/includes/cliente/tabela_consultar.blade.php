@@ -32,12 +32,14 @@
                         <td>{{$idade}}</td>
                         <td>{{date('d/m/Y', strtotime($cliente->data_nasc))}}</td>
                         <td>
+                            @if($cliente->id != 1)
                             <a href="{{route('cliente.view.alterar', [
                                 'id' => base64_encode($cliente->id),
                                 'url' => base64_encode($clientes->currentPage())
                                 ])}}" 
                                 class="btn btn-sm btn-warning">Alterar</a>
                             <a href="" data-id="{{$cliente->id}}" class="btn btn-sm btn-danger excluir-cliente">Excluir</a>
+                            @endif
                         </td>
                     </tr>
                     @empty
@@ -218,6 +220,11 @@ $("form#add_numero").on('submit', function(e){
                 'message': "Número já existente no sistema!",
                 'type': "error",
                 });
+            }else if(e == 3){
+                $.msgbox({
+                'message': "Não permitido cadastrar número em cliente anonimo.",
+                'type': "error",
+                });
             }else{
                 $("#tabela-telefone").empty().html(e);
                 $.msgbox({
@@ -275,7 +282,8 @@ $("a.excluir-cliente").on('click', function(e){
                             'message': "Cliente deletado com sucesso!",
                             'type':'info'
                         });
-                        $("#tabela-cliente").empty().html(e);
+                        getRouteAjax("{{route('cliente.view.principal')}}", "#tabela-cliente", "{{$clientes->currentPage()}}");
+                        // $("#tabela-cliente").empty().html(e);
                         
                     },
                     error: function(e){

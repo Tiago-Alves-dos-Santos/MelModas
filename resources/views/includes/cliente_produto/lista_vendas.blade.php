@@ -19,48 +19,67 @@ div.lista-venda a{
 </style>
 <div id="lista-vendas">
     <div class="row">
-        @forelse ($vendas as $item)
-        <div class="col-md-8" style="margin-top: 40px">
-            <div class="lista-venda">
-                <h4>{{($item->cliente_anonimo == null ?$item->nome:$item->cliente_anonimo)}} || R${{$item->valor_total}} ({{$item->forma_pagamento}}) {{$item->parcelamento}}/12</h4>
-                <h5>{{$telefones[$loop->index]}}</h5>
-                <h3>{{date('d/m/Y', strtotime($item->created_at))}}</h3>
+        <div class="scroll">
+            <table id="tabela-produtos" style="margin-top: 15px">
+                <thead class="orange">
+                    <tr>
+                        <td>#ID#</td>
+                        <td>Nome</td>
+                        <td>Telefone</td>
+                        <td>Valor Total(R$)</td>
+                        <td>Forma Pagamento</td>
+                        <td>Parcelamento</td>
+                        <td>Estado</td>
+                        <td>Data</td>
+                        <td>Descrição</td>
+                        <td>Ações</td>
+                    </tr>
+                </thead>
+                <tbody>
+                    @forelse ($vendas as $item)
+                    <tr data-id="">
+                        <td>{{$item->id}}</td>
+                        <td>{{($item->cliente_anonimo == null ?$item->nome:$item->cliente_anonimo)}}</td>
+                        <td>{{$telefones[$loop->index]}}</td>
+                        <td>{{$item->valor_total}}</td>
+                        <td>{{$item->forma_pagamento}}</td>
+                        <td>{{$item->parcelamento}}/12</td>
+                        @if ($item->estado_compra == "concluida")
+                        <td style="background-color: green; color:white">{{$item->estado_compra}}</td>
+                        @else
+                        <td style="background-color: red; color:white">{{$item->estado_compra}}</td> 
+                        @endif
+                        <td>{{date('d/m/Y', strtotime($item->created_at))}}</td>
+                        <td>{{$item->descricao}}</td>
+                        <td>
+                            <a href="{{route('venda.listarProdutos', [
+                            'id' => (isset($item->id_cliente)?$item->id_cliente:null),
+                            'data' => $item->created_at
+                            ])}}" target="_blank">Lista de Produtos</a>
 
-                <p>
-                    {{$item->descricao}}
-                </p>
-            </div>                
-            <div style="clear: both"></div>
+                            <a target="_blank" href="{{route('venda.comprovanteVenda', [
+                                "nome" => ($item->cliente_anonimo == null ?$item->nome:$item->cliente_anonimo),
+                                "data" => $item->created_at,
+                                "id" => ($item->id_cliente == null ?0:$item->id_cliente)
+                            ])}}">/ Comprovante</a>
+
+                            <a data-idcl="{{$item->id_cliente}}" data-dia="{{$item->created_at}}" id="venda_reseta" href="#">/ Resetar</a>
+                            @if($item->forma_pagamento == "fiado" && $item->estado_compra == "andamento")
+                            <a id="venda_concluir" href="#" data-idcl="{{$item->id_cliente}}" data-dia="{{$item->created_at}}">
+                                / Concluir
+                            </a>
+                            @endif
+                        </td>
+                    </tr>
+                    @empty
+                        <tr>
+                            <td colspan="9">Venda não encontrada!</td>
+                        </tr>   
+                    @endforelse
+                </tbody>
+            </table>
         </div>
-        <div class="col-md-4" style="margin-top: 40px">
-            <div class="lista-venda" style="text-align: center">
-                <h4>
-                    <a href="{{route('venda.listarProdutos', [
-                        'id' => (isset($item->id_cliente)?$item->id_cliente:null),
-                        'data' => $item->created_at
-                    ])}}" target="_blank">Lista de Produtos</a>
-                </h4>
-            </div>
-        </div>
-        @empty
-        <div class="col-md-8">
-            <div class="lista-venda">
-                <h4>Sem Vendas Realizadas!</h4>
-                
-            </div>                
-            <div style="clear: both"></div>
-        </div>
-        <div class="col-md-4">
-            <div class="lista-venda" style="text-align: center">
-                <h4>
-                    <a href="#">Vazio</a>
-                </h4>
-            </div>
-        </div>
-        @endforelse
     </div>
-
-
     <div class="row">
         <div class="col-md-6" style="position:relative;">
                 {{-- <div style="position: absolute; right:0;">
@@ -76,7 +95,7 @@ div.lista-venda a{
             @endif
         </div>
     </div>
-</div>
+    
 
 <script>
 //colocar classe active no link clicado
@@ -102,5 +121,88 @@ $('.pagination .page-link').click(function (e) {
 
         }
     });
+});
+
+$("a#venda_reseta").on('click',function(e){
+    e.preventDefault();
+    let id_cliente = $(this).attr('data-idcl');
+    let dia = $(this).attr('data-dia');
+    $.msgbox({ 
+        'message' : 'Você realmente deseja resetar esta venda?',
+        'type' : 'confirm', 
+        'buttons' : [
+            {'type' : 'yes', 'value': 'Sim'},
+            {'type' : 'no', 'value': 'Não'},
+            {'type' : 'close', 'value': 'Cancelar' }
+        ],
+        'callback' : function(result){
+            if(result){
+                $("div#load-page").fadeIn('fast');
+                $.ajax({
+                    type: 'POST',
+                    url: "{{route('venda.ajax.resetarVenda')}}",
+                    data:{
+                        "id": id_cliente,
+                        "dia": dia,
+                        "_token": "{{ csrf_token() }}",
+                    },
+                    success: function (e) {
+                        console.log(e);
+                        if(e == "true"){
+                            getRouteAjax("{{route('venda.view.viewVendas')}}", "#lista-vendas", "{{$vendas->currentPage()}}");
+                        }
+                    },
+                    complete: function(e){
+                        $("div#load-page").fadeOut('fast');
+                    },
+                    error: function (e) {
+                        console.log(e);
+                    }
+                });
+            }
+        } 
+    });
+    
+});
+$("a#venda_concluir").on('click',function(e){
+    e.preventDefault();
+    let id_cliente = $(this).attr('data-idcl');
+    let dia = $(this).attr('data-dia');
+    $.msgbox({ 
+        'message' : 'Você realmente deseja concluir esta venda?',
+        'type' : 'confirm', 
+        'buttons' : [
+            {'type' : 'yes', 'value': 'Sim'},
+            {'type' : 'no', 'value': 'Não'},
+            {'type' : 'close', 'value': 'Cancelar' }
+        ],
+        'callback' : function(result){
+            if(result){
+                $("div#load-page").fadeIn('fast');
+                $.ajax({
+                    type: 'POST',
+                    url: "{{route('venda.ajax.concluirVenda')}}",
+                    data:{
+                        "id": id_cliente,
+                        "dia": dia,
+                        "_token": "{{ csrf_token() }}",
+                    },
+                    success: function (e) {
+                        console.log(e);
+                        if(e == "true"){
+                            getRouteAjax("{{route('venda.view.viewVendas')}}", "#lista-vendas", "{{$vendas->currentPage()}}");
+                        }
+                    },
+                    complete: function(e){
+                        $("div#load-page").fadeOut('fast');
+                    },
+                    error: function (e) {
+                        console.log(e);
+                    }
+                });
+            }
+        } 
+    });
+    
 });
 </script>

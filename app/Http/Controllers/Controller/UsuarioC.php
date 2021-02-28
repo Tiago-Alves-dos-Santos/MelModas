@@ -12,8 +12,12 @@ class UsuarioC extends Controller
     {
         $this->middleware('login',
             ['except' => [
-                'login','logout'
+                'login','logout','viewLogin'
             ]]);
+    }
+    public function viewLogin()
+    {
+        return view('logins');
     }
     public function viewDashboard()
     {
@@ -57,7 +61,6 @@ class UsuarioC extends Controller
             'tipo' => 'info',
             'texto' => 'Usuário '.$nome.' deslogado com sucesso!'
         ]]);
-        session(['login' => false]);
         return redirect()->route('inicio');
     }
 }
