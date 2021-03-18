@@ -137,9 +137,13 @@ Route::group( [ 'prefix' => 'admin/rotinas' ], function()
 //         "senha" => "melmodas"
 //     ]);
 // });
-Route::get('/promocao', function () {
-    App\Model\Promocao::create([
-        "valor_atingir" => 4300,
-        "desconto_porcento" => 10
-    ]);
-});
+// Route::get('/promocao', function () {
+//     App\Model\Promocao::create([
+//         "valor_atingir" => 4300,
+//         "desconto_porcento" => 10
+//     ]);
+// });
+// Route::get('/teste', function () {
+//     $localIP = getHostByName(getHostName());
+//     echo $localIP;
+// });

@@ -6,6 +6,7 @@ use App\Model\Usuario;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\DB;
+use SimpleSoftwareIO\QrCode\Facades\QrCode;
 class UsuarioC extends Controller
 {
     public function __construct()

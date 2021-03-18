@@ -36,6 +36,24 @@
 					<span class="login100-form-title p-b-26" id="titulo-boas-vindas">
 						Bem Vindo!
 					</span>
+					@php
+					use SimpleSoftwareIO\QrCode\Facades\QrCode;
+					$link = null;
+					$porta = 8000;
+					$ipLocal = getHostByName(getHostName());
+					if (!empty($_SERVER['HTTPS'])){
+						$link = "https://";
+					}else{
+						$link = "http://";
+					}
+					$link .= "$ipLocal:$porta";
+					@endphp
+					<div style="width: 100%; display: flex; justify-content: center; flex-wrap: wrap">
+						{{QrCode::encoding('UTF-8')->size(125)->style('round')->color(247, 7, 195)->generate($link)}}
+					</div>
+					<div style="width: 100%">
+						<h5 class="text-success" style="text-align: center">Abra pelo celular!</h5>
+					</div>
 					<span class="login100-form-title p-b-48">
                         {{-- <i class="zmdi zmdi-font"></i> --}}
                         <img src="{{asset('img/logo.jpg')}}" class="img-fluid" style=""/>
