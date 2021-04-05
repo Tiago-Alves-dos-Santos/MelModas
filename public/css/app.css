@@ -20,7 +20,7 @@ table thead {
 }
 
 table thead.orange tr {
-  background-color: #ffaa00;
+  background-color: #055eb7;
   color: white;
   font-weight: bold;
 }
@@ -32,12 +32,12 @@ table tbody tr {
 }
 
 table tbody tr:hover {
-  background-color: #fc8b02;
+  background-color: #03386d;
   color: white;
 }
 
 table tbody tr.selecionado {
-  background-color: #fc8b02;
+  background-color: #03386d;
   color: white;
 }
 
@@ -108,7 +108,7 @@ div#load-page {
 /*Menu(navbar) dashboard*/
 
 .navbar-inverse {
-  background-color: #fc8b02 !important;
+  background-color: #055eb7 !important;
   border-color: #F0F0F0;
   min-height: 80px;
 }
@@ -130,7 +130,7 @@ div#load-page {
 /* Icones dashboard*/
 
 div.div-square:hover {
-  background-color: #fc8b02;
+  background-color: #055eb7;
   color: white;
   transition: 1s;
 }
@@ -143,7 +143,7 @@ div.div-square:hover i {
 /*Rodape da pagina*/
 
 .footer {
-  background-color: #fc8b02 !important;
+  background-color: #055eb7 !important;
   width: 100%;
   color: black;
   padding: 20px 50px 20px 50px;

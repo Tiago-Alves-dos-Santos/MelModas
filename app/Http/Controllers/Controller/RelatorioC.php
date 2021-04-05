@@ -31,6 +31,8 @@ class RelatorioC extends Controller
         $valor_total = 0;
         $valor_bruto = 0;
         $valor_lucro = 0;
+        //true apenas para parselas, false para acumular as parcelas
+        $parcelas = true;
         foreach($vendas as $venda){
             $data_final_parcelamento = date('Y-m-d', strtotime("+".$venda->parcelamento." month", strtotime($venda->created_at)));
             
@@ -57,9 +59,14 @@ class RelatorioC extends Controller
                     $lucro_bruto_mes = $venda->soma / $venda->parcelamento;
 
                     
-
-                    $lucro_obtido = $lucro_por_mes * $parcelas_concluidas;
-                    $lucro_bruto_obitido = $lucro_bruto_mes * $parcelas_concluidas;
+                    //acumula as parcelas
+                    if(!$parcelas){
+                        $lucro_obtido = $lucro_por_mes * $parcelas_concluidas;
+                        $lucro_bruto_obitido = $lucro_bruto_mes * $parcelas_concluidas;
+                    }else{
+                        $lucro_obtido = $lucro_por_mes * 1;
+                        $lucro_bruto_obitido = $lucro_bruto_mes * 1;
+                    }
 
                     $lucro_oficial =  $lucro_obtido - $lucro_bruto_obitido;
 

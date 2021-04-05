@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Tempo de geração: 27-Fev-2021 às 17:10
+-- Tempo de geração: 05-Abr-2021 às 18:30
 -- Versão do servidor: 10.4.14-MariaDB
 -- versão do PHP: 7.3.22
 
@@ -39,6 +39,13 @@ CREATE TABLE `cliente` (
   `complemento` text DEFAULT NULL,
   `data_nasc` date DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Extraindo dados da tabela `cliente`
+--
+
+INSERT INTO `cliente` (`id`, `created_at`, `updated_at`, `deleted_at`, `nome`, `rua`, `bairro`, `numero_casa`, `complemento`, `data_nasc`) VALUES
+(1, '2021-04-05 13:28:40', '2021-04-05 13:28:40', NULL, 'Consumidor Final', '----', '-----', 0, 'Consumidor Final não é um cliente cadastrado. Logo não tem direito a promoções oferecidas pelo estabelecimento', '0001-01-01');
 
 -- --------------------------------------------------------
 
@@ -130,6 +137,13 @@ CREATE TABLE `promocao` (
   `valor_atingir` double DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+--
+-- Extraindo dados da tabela `promocao`
+--
+
+INSERT INTO `promocao` (`id`, `created_at`, `updated_at`, `deleted_at`, `desconto_porcento`, `valor_atingir`) VALUES
+(1, '2021-02-27 15:05:21', '2021-02-27 15:05:21', NULL, 10, 4300);
+
 -- --------------------------------------------------------
 
 --
@@ -144,6 +158,13 @@ CREATE TABLE `telefone` (
   `telefone` varchar(255) DEFAULT NULL,
   `cliente_id` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Extraindo dados da tabela `telefone`
+--
+
+INSERT INTO `telefone` (`id`, `created_at`, `updated_at`, `deleted_at`, `telefone`, `cliente_id`) VALUES
+(1, '2021-04-05 13:28:41', '2021-04-05 13:28:41', NULL, '(55) 5 5555-5555', 1);
 
 -- --------------------------------------------------------
 
@@ -234,7 +255,7 @@ ALTER TABLE `usuario`
 -- AUTO_INCREMENT de tabela `cliente`
 --
 ALTER TABLE `cliente`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT de tabela `cliente_produto`
@@ -264,13 +285,13 @@ ALTER TABLE `produto`
 -- AUTO_INCREMENT de tabela `promocao`
 --
 ALTER TABLE `promocao`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT de tabela `telefone`
 --
 ALTER TABLE `telefone`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT de tabela `usuario`

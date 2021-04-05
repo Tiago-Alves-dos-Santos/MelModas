@@ -1,10 +1,8 @@
 @php
 header("Content-type: text/css");
 $url = public_path('img/logo.jpg');
-$fonte = public_path('fonts/maquina/maquina_regular.otf');
 $total = 0;
 $objeto = ["id" => 0, "data" => null];
-
 @endphp
 <html>
     <head>
@@ -13,20 +11,16 @@ $objeto = ["id" => 0, "data" => null];
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
         <style>
-        /* @font-face{
-            font-family:'FonteMaquina';/*O nome da fonte é obrigatorio colocar com aspas simples*/
-            src: url(<?php echo $fonte ?>);
-        } */
         .page-break {
             page-break-after: always;
         }
+        
         body{
             background-image: url(<?php echo $url ?>);
             background-attachment: fixed;
             background-position: center;
             background-repeat: no-repeat;
             opacity: 0.3;
-            /* font-family: FonteMaquina, sans-serif; */
         }
         div#fundo{
             position: absolute;
@@ -35,37 +29,36 @@ $objeto = ["id" => 0, "data" => null];
             opacity: 0.2;
             z-index: -34;
         }
+        .font-pixel{
+            font-size: 15px;
+        }
         </style>
     </head>
     <body>
-        {{-- <div id="fundo">
-            {{-- <img src="../../../public/img/logo.jpg"/> --}}
-            {{-- <img src="{{public_path('img/logo.jpg')}}"> --}}
-        {{-- </div>  --}}
         <div class="container">
             <div class="row">
                 <div class="col-md-12">
-                    <h1 style="text-align: center">Mel Modas</h1>
+                    <h1 style="text-align: center;">R&R</h1>
                 </div>
             </div>
             <div class="row">
+                <div class="col-md-12">
+                    <h5>@php echo str_repeat("=", 25) @endphp</h5>
+                </div>
+            </div>
+            {{-- <div class="row">
+                <div class="col-md-12">
+                    <h5 style="text-align: center">Produtos</h5>
+                </div>
+            </div> --}}
+            {{-- <div class="row">
                 <div class="col-md-12">
                     <h5>@php echo str_repeat("=", 19) @endphp</h5>
                 </div>
-            </div>
+            </div> --}}
             <div class="row">
                 <div class="col-md-12">
-                    <h3 style="text-align: center">Produtos</h3>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-md-12">
-                    <h5>@php echo str_repeat("=", 19) @endphp</h5>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-md-12">
-                        <h5>Código // Nome // quantidade * valor = total</h5>
+                        <h5 class="font-pixel">Código // Nome // quantidade * valor = total</h5>
                         <h5>@php echo str_repeat("*", 20) @endphp</h5>
                 </div>
             </div>
@@ -76,11 +69,11 @@ $objeto = ["id" => 0, "data" => null];
                         $objeto["id"] = $item->id;
                         $objeto["data"] = $item->created_at;
                         @endphp
-                        <h5>{{$item->codigo}} // {{$item->nome}} // {{$item->quantidade_vendida}} * {{$item->valor_venda}} = {{ ($item->quantidade_vendida * $item->valor_venda) }}</h5>
+                        <h5 class="font-pixel">{{$item->codigo}} // {{$item->nome}} // {{$item->quantidade_vendida}} * {{$item->valor_venda}} = {{ ($item->quantidade_vendida * $item->valor_venda) }}</h5>
                         @php
                         $total += ($item->quantidade_vendida * $item->valor_venda);
                         @endphp
-                        <h4>@php echo str_repeat("-", 35) @endphp</h4>
+                        <h5>@php echo str_repeat("-", 35) @endphp</h5>
                     @empty
                         <h5></h5>
                     @endforelse
@@ -89,15 +82,15 @@ $objeto = ["id" => 0, "data" => null];
 
             <div class="row">
                 <div class="col-md-12">
-                        <h2>Total: R$ {{$total}}</h2>
+                        <h2 style="font-size: 23px">Total: R$ {{$total}}</h2>
                         <h4>@php echo str_repeat("*", 20) @endphp</h4>
                 </div>
             </div>
             <div class="row">
                 <div class="col-md-12">
-                        <h5>Data da Venda: {{date('d/m/Y H:i:s', strtotime($objeto["data"]))}}</h5>
-                        <h5>Data de Emissão: {{date('d/m/Y H:i:s')}}</h5>
-                        <h5>Comprovante em razão do cliente: {{$cliente->nome}}</h5>
+                        <h5 style="font-size: 18px">Data da Venda: {{date('d/m/Y H:i:s', strtotime($objeto["data"]))}}</h5>
+                        <h5 style="font-size: 18px">Data de Emissão: {{date('d/m/Y H:i:s')}}</h5>
+                        <h5 style="font-size: 18px">Comprovante em razão do cliente: {{$cliente->nome}}</h5>
                         {{-- <h4>@php echo str_repeat("*", 20) @endphp</h4> --}}
                 </div>
             </div>

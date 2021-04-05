@@ -58,7 +58,7 @@ div#load-page{
 
 /*Menu(navbar) dashboard*/
 .navbar-inverse {
-    background-color: $cor2 !important;
+    background-color: $azul !important;
     border-color: #F0F0F0;
     min-height: 80px;
 }
@@ -78,7 +78,7 @@ div#load-page{
 
 /* Icones dashboard*/
 div.div-square:hover{
-    background-color: $cor2;
+    background-color: $azul;
     color:$texto_cor2;
     transition: 1s;
     h4,i{
@@ -88,7 +88,7 @@ div.div-square:hover{
 
 /*Rodape da pagina*/
 .footer {
-    background-color: $cor2 !important;
+    background-color: $azul !important;
     width: 100%;
     color: $texto_cor;
     padding: 20px 50px 20px 50px;

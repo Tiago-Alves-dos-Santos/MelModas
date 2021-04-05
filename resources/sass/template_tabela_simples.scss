@@ -9,7 +9,7 @@ table thead{
     text-align: center;
 }
 table thead.orange tr{
-    background-color: $cor;
+    background-color: $azul;
     color: $texto_cor2;
     font-weight: bold;
 }
@@ -18,11 +18,11 @@ table tbody tr{
     background-color: $fundo;
     cursor: pointer;
     &:hover{
-        background-color: $cor2;
+        background-color: darken($azul, 15%);
         color:$texto_cor2;
     }
 }
 table tbody tr.selecionado{
-    background-color: $cor2;
+    background-color: darken($azul, 15%);
     color:$texto_cor2;
 }
