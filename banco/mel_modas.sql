@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Tempo de geração: 05-Abr-2021 às 18:30
+-- Tempo de geração: 13-Abr-2021 às 02:00
 -- Versão do servidor: 10.4.14-MariaDB
 -- versão do PHP: 7.3.22
 
@@ -64,11 +64,21 @@ CREATE TABLE `cliente_produto` (
   `parcelamento` varchar(255) DEFAULT NULL,
   `estado_compra` varchar(45) DEFAULT NULL,
   `descricao` varchar(255) DEFAULT NULL,
+  `nv_vl_unitario` double DEFAULT NULL,
   `cliente_anonimo` varchar(255) DEFAULT NULL,
   `created_at` datetime DEFAULT NULL,
   `updated_at` datetime DEFAULT NULL,
   `deleted_at` datetime DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Extraindo dados da tabela `cliente_produto`
+--
+
+INSERT INTO `cliente_produto` (`id`, `cliente_id`, `produto_id`, `quantidade_vendida`, `valor_total`, `valor_bruto`, `forma_pagamento`, `parcelamento`, `estado_compra`, `descricao`, `nv_vl_unitario`, `cliente_anonimo`, `created_at`, `updated_at`, `deleted_at`) VALUES
+(4, 1, 1, 2, 50, 6, 'A vista', '0', 'concluida', NULL, 5, '', '2021-04-06 14:36:40', '2021-04-06 14:36:40', NULL),
+(5, 1, 1, 3, 50, 9, 'A vista', '0', 'concluida', NULL, 10, '', '2021-04-06 14:36:40', '2021-04-06 14:36:40', NULL),
+(6, 1, 1, 3, 50, 9, 'A vista', '0', 'concluida', NULL, 4, '', '2021-04-06 14:36:40', '2021-04-06 14:36:40', NULL);
 
 -- --------------------------------------------------------
 
@@ -121,6 +131,13 @@ CREATE TABLE `produto` (
   `valor_venda` double DEFAULT NULL,
   `descricao` text DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Extraindo dados da tabela `produto`
+--
+
+INSERT INTO `produto` (`id`, `created_at`, `updated_at`, `deleted_at`, `codigo`, `nome`, `quantidade`, `marca`, `foto`, `valor_compra`, `valor_venda`, `descricao`) VALUES
+(1, '2021-04-06 13:19:56', '2021-04-06 14:36:40', NULL, '1010', 'Cerveja', 35, 'skol', NULL, 3, 4, NULL);
 
 -- --------------------------------------------------------
 
@@ -261,7 +278,7 @@ ALTER TABLE `cliente`
 -- AUTO_INCREMENT de tabela `cliente_produto`
 --
 ALTER TABLE `cliente_produto`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT de tabela `cliente_promocao`
@@ -279,7 +296,7 @@ ALTER TABLE `nota_promissoria`
 -- AUTO_INCREMENT de tabela `produto`
 --
 ALTER TABLE `produto`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT de tabela `promocao`

@@ -79,6 +79,10 @@
                     <input type="text" id="codigo-input" class="form-control" placeholder="Ex: 765479723423"/>
                 </div>
                 <div class="col-md-2">
+                    <label>Vl.Unitario</label>
+                    <input type="number" min="0.01" step="0.01" id="vlUnitario" class="form-control" placeholder="Ex: 23,50"/>
+                </div>
+                <div class="col-md-2">
                     <label>Quantidade</label>
                     <input type="number" id="quantidade-input" class="form-control" min="1" step="1" placeholder="Ex: 1"/>
                 </div>
@@ -94,7 +98,9 @@
                         <option value="3">Quantidade Automática</option>
                     </select>
                 </div>
-                <div class="col-md-2">
+            </div>
+            <div class="form-row">
+                <div class="col-md-12">
                     <label></label>
                     {{-- <input type="submit" class="form-control" value="adcionar"/> --}}
                     <a href="" style="margin-top: 5px; margin-bottom: 10px" class="btn btn-danger btn-block" id="remover-todos">Remover Tds.</a>
@@ -138,7 +144,7 @@
                     <label>Desconto(%):
                         <span id="valor_desconto" class="text-success">R$</span>
                     </label>
-                    <input type="number" id="desconto" placeholder="100" class="form-control" min="0" max="100" step="1"/>
+                    <input type="number" id="desconto" placeholder="100" class="form-control" min="0.01"  step="0.01"/>
                 </div>
             </div>
             <div class="form-row">
@@ -268,6 +274,7 @@ $("a#add-produto").on('click', function(e){
     e.preventDefault();
     let codigo = $("input#codigo-input").val();
     let quantidade_vender = $("input#quantidade-input").val();
+    let valor_novo = $("#vlUnitario").val();
     $.ajax({
         url: "{{route('venda.ajax.addProduto')}}",
         type: 'POST',
@@ -277,7 +284,11 @@ $("a#add-produto").on('click', function(e){
         },
         success: function(e){
             let produto = JSON.parse(e);
-            $("table#tabela-lista-produtos tbody").append("<tr data-id=''><td>"+produto.id+"</td><td class='codigo-valor'>"+produto.codigo+"</td><td>"+produto.nome+"</td><td>"+produto.marca+"</td><td>"+produto.valor_venda+"</td><td class='quantidade_venda'>"+quantidade_vender+"</td><td class='total-valor'>"+(produto.valor_venda*quantidade_vender)+"</td><td><a href='' class='btn btn-danger excluir-produto' data-total='"+(produto.valor_venda*quantidade_vender)+"' >Remover</a></td></tr>");
+            if(valor_novo > 0){
+                $("table#tabela-lista-produtos tbody").append("<tr data-id=''><td>"+produto.id+"</td><td class='codigo-valor'>"+produto.codigo+"</td><td>"+produto.nome+"</td><td>"+produto.marca+"</td><td class='vl-unitario'>"+valor_novo+"</td><td class='quantidade_venda'>"+quantidade_vender+"</td><td class='total-valor'>"+(valor_novo*quantidade_vender)+"</td><td><a href='' class='btn btn-danger excluir-produto' data-total='"+(valor_novo*quantidade_vender)+"' >Remover</a></td></tr>");
+            }else{
+                $("table#tabela-lista-produtos tbody").append("<tr data-id=''><td>"+produto.id+"</td><td class='codigo-valor'>"+produto.codigo+"</td><td>"+produto.nome+"</td><td>"+produto.marca+"</td><td class='vl-unitario'>"+produto.valor_venda+"</td><td class='quantidade_venda'>"+quantidade_vender+"</td><td class='total-valor'>"+(produto.valor_venda*quantidade_vender)+"</td><td><a href='' class='btn btn-danger excluir-produto' data-total='"+(produto.valor_venda*quantidade_vender)+"' >Remover</a></td></tr>");
+            }
             let valores = $("td.total-valor");
             let total=0;
             for(let i=0; i< valores.length; i++){
@@ -294,6 +305,7 @@ $("a#add-produto").on('click', function(e){
             });
             $("input#quantidade-input").val("");
             $("input#codigo-input").val("");
+            $("input#vlUnitario").val("");
             $("input#codigo-input").focus();
         },
         error: function(e){
@@ -321,6 +333,13 @@ $("form#form_vender").on('submit', function(e){
         let campo = $(valores).eq(i).html();
         codigos.push(campo);
     }
+
+    let precos_unitarios = $("td.vl-unitario");
+    let precos_unitarios_array = [];
+    for(let i=0; i< precos_unitarios.length; i++){
+        precos_unitarios_array.push($(precos_unitarios).eq(i).html());
+    }
+
     let valores_venda = $("td.quantidade_venda");
     let valores_total = [];
     for(let i=0; i< valores_venda.length; i++){
@@ -352,7 +371,8 @@ $("form#form_vender").on('submit', function(e){
             "desconto": desconto,
             "descricao": descricao,
             "valor_total": valor_total,
-            "forma_pagamento": forma_pagamento
+            "forma_pagamento": forma_pagamento,
+            "precos_unitarios_array": precos_unitarios_array
         },
         complete: function(e){
             $("div#load-page").fadeOut('fast');
@@ -405,8 +425,10 @@ $("form#form_vender").on('submit', function(e){
 //calcular o desconto 
 $("input#desconto").on('keydown keyup', function(e){
     let total = parseFloat($("span#total-venda").html());
-    let desconto = parseInt($(this).val());
-    let valor_atual = total * ((100 - desconto)/100);
+    // let desconto = parseInt($(this).val());
+    // let valor_atual = total * ((100 - desconto)/100);
+    let desconto = parseFloat($(this).val());
+    let valor_atual = total - desconto;
     $("span#valor_desconto").html("R$ "+valor_atual);
 });
 </script>

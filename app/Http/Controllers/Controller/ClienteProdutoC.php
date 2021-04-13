@@ -98,8 +98,14 @@ class ClienteProdutoC extends Controller
                 echo "<li>Código: {$value->codigo}</li>";
                 echo "<li>Nome: {$value->nome}</li>";
                 echo "<li>Quantidade Vendida: {$value->quantidade_vendida}</li>";
-                echo "<li>Valor: R$ {$value->valor_venda}</li>";
-                echo "<li>Total: R$ ".$value->valor_venda * $value->quantidade_vendida."</li>";
+                if($value->nv_vl_unitario > 0){
+                    echo "<li>Valor: R$ {$value->nv_vl_unitario}</li>";
+                    echo "<li>Total: R$ ".$value->nv_vl_unitario * $value->quantidade_vendida."</li>";
+                }else{
+                    echo "<li>Valor: R$ {$value->valor_venda}</li>";
+                    echo "<li>Total: R$ ".$value->valor_venda * $value->quantidade_vendida."</li>";
+                }
+                
             echo "</ul>";
             echo "<h3>=====================================</h3>";
         }
@@ -164,7 +170,7 @@ class ClienteProdutoC extends Controller
         }
         //verfica descontos,caso haja desconto, não tem promocao
         if($request->desconto != null && $request->desconto != 0){
-            $valor_total = $request->valor_total * ((100 - $request->desconto)/100);
+            $valor_total = $request->valor_total - $request->desconto;
         }else if($promocao && ($request->desconto == null || $request->desconto == 0)){//caso haja promocao sem desconto a promocao ocorre 
             $promocao = Promocao::find(1);
             $valor_total = $request->valor_total * ((100 - $promocao->desconto_porcento)/100);
@@ -196,6 +202,7 @@ class ClienteProdutoC extends Controller
             ClienteProduto::create([
                 "cliente_id" => $request->cliente_id,
                 "produto_id" => $produto->id,
+                "nv_vl_unitario" => $request->precos_unitarios_array[$cont],
                 "valor_total" =>$valor_total,
                 "valor_bruto" => $valor_bruto[$cont],
                 "forma_pagamento" => $request->forma_pagamento,

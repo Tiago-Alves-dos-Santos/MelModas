@@ -69,7 +69,11 @@ $objeto = ["id" => 0, "data" => null];
                         $objeto["id"] = $item->id;
                         $objeto["data"] = $item->created_at;
                         @endphp
-                        <h5 class="font-pixel">{{$item->codigo}} // {{$item->nome}} // {{$item->quantidade_vendida}} * {{$item->valor_venda}} = {{ ($item->quantidade_vendida * $item->valor_venda) }}</h5>
+                        <h5 class="font-pixel">{{$item->codigo}} // {{$item->nome}} // {{$item->quantidade_vendida}} * {{
+                        ($item->nv_vl_unitario > 0)?$item->nv_vl_unitario:$item->valor_venda
+                        }} = {{ 
+                            ($item->quantidade_vendida * (($item->nv_vl_unitario > 0)?$item->nv_vl_unitario:$item->valor_venda))
+                         }}</h5>
                         @php
                         $total += ($item->quantidade_vendida * $item->valor_venda);
                         @endphp

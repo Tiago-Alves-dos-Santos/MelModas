@@ -89,8 +89,13 @@ $objeto = ["id" => 0, "data" => null];
                         <td>{{$venda->codigo}}</td>
                         <td>{{$venda->nome}}</td>
                         <td style="text-align: center">{{$venda->quantidade_vendida}}</td>
+                        @if($venda->nv_vl_unitario > 0)
+                        <td>{{$venda->nv_vl_unitario}}</td>
+                        <td>{{$venda->nv_vl_unitario * $venda->quantidade_vendida}}</td>
+                        @else
                         <td>{{$venda->valor_venda}}</td>
                         <td>{{$venda->valor_venda * $venda->quantidade_vendida}}</td>
+                        @endif
                         <td>{{$venda->estado_compra}}</td>
                         <td>{{date('d/m/Y H:i:s', strtotime($venda->created_at))}}</td>
                         <td>{{$venda->parcelamento}}/12</td>
@@ -136,8 +141,13 @@ $objeto = ["id" => 0, "data" => null];
                         <td>{{$venda->codigo}}</td>
                         <td>{{$venda->nome}}</td>
                         <td>{{$venda->quantidade_vendida}}</td>
+                        @if($venda->nv_vl_unitario > 0)
+                        <td>{{$venda->nv_vl_unitario}}</td>
+                        <td>{{$venda->nv_vl_unitario * $venda->quantidade_vendida}}</td>
+                        @else
                         <td>{{$venda->valor_venda}}</td>
                         <td>{{$venda->valor_venda * $venda->quantidade_vendida}}</td>
+                        @endif
                         <td>{{$venda->estado_compra}}</td>
                         <td>{{date('d/m/Y H:i:s', strtotime($venda->created_at))}}</td>
                         <td>{{$venda->parcelamento}}/12</td>
