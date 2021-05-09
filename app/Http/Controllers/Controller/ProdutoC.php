@@ -76,7 +76,7 @@ class ProdutoC extends Controller
     {
         $produto = Produto::find($request->id);
         $produto->quantidade += $request->quantidade;
-        $produto->peso = $request->peso_venda;
+        $produto->peso += $request->peso_venda;
         $produto->save();
         return json_encode(true);
     }
@@ -95,10 +95,10 @@ class ProdutoC extends Controller
                 "descricao" => $request->descricao,
                 "peso" => $request->peso_entrada
             ]);
-            $produto = $produto->fresh();
-            $pesovenda = PesoVenda::find(1);
-            $pesovenda->peso_total += $produto->peso;
-            $pesovenda->save();
+            // $produto = $produto->fresh();
+            // $pesovenda = PesoVenda::find(1);
+            // $pesovenda->peso_total += $produto->peso;
+            // $pesovenda->save();
             return json_encode(2);
         }else{
             return json_encode(3);

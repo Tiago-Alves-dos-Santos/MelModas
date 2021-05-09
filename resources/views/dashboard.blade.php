@@ -8,7 +8,7 @@
 
 @section('conteudo')
 <div class="row text-center pad-top">
-    @if(\App\Model\PesoVenda::find(1)->peso_total > 0)
+    {{-- @if(\App\Model\PesoVenda::find(1)->peso_total > 0) --}}
     <div class="col-lg-2 col-md-2 col-sm-2 col-xs-6" id="abrir_venda">
         <div class="div-square">
             <a href="{{route('venda.view.venda')}}" >
@@ -19,7 +19,7 @@
     
     
     </div> 
-    @endif
+    {{-- @endif --}}
     {{-- @if(session('tipo') == session('tipo_users.0')) --}}
     <div class="col-lg-2 col-md-2 col-sm-2 col-xs-6">
         <div class="div-square">
@@ -112,7 +112,7 @@
     </div>
     @endif
 
-    @if(session('tipo') == session('tipo_users.0'))
+    {{-- @if(session('tipo') == session('tipo_users.0'))
     <div class="col-lg-2 col-md-2 col-sm-2 col-xs-6">
         <div class="div-square">
             <a href="{{route('peso.view.index')}}" >
@@ -123,9 +123,9 @@
     
     
     </div>
-    @endif
+    @endif --}}
 
-    @if(session('tipo') == session('tipo_users.0') || session('tipo') == session('tipo_users.1'))
+    {{-- @if(session('tipo') == session('tipo_users.0') || session('tipo') == session('tipo_users.1'))
     <div class="col-lg-2 col-md-2 col-sm-2 col-xs-6">
         <div class="div-square">
             <a href="{{route('deposito.view.index')}}">
@@ -134,7 +134,7 @@
         </a>
         </div>    
     </div>
-    @endif
+    @endif --}}
 
     @if(session('tipo') == session('tipo_users.0'))
     <div class="col-lg-2 col-md-2 col-sm-2 col-xs-6">

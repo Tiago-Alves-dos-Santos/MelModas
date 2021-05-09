@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Controller;
 
 use App\Model\Caixa;
 use Illuminate\Http\Request;
+use App\Classes\Configuracao;
 use App\Http\Controllers\Controller;
 
 class CaixaC extends Controller
@@ -16,7 +17,7 @@ class CaixaC extends Controller
     {
         $caixas = Caixa::orderBy('created_at','desc')->paginate(20);
         $registros = Configuracao::mapPaginate($caixas);
-        return view('caixa.index', compact('caixas'));
+        return view('caixa.index', compact('caixas','registros'));
     }
     public function open(Request $request)
     {

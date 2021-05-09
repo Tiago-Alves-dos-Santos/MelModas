@@ -144,7 +144,13 @@ class ClienteProdutoC extends Controller
     }
     public function addProduto(Request $request)
     {
-        return json_encode(Produto::where('codigo', $request->codigo)->first());
+        $existe = Produto::where('codigo', $request->codigo)->exists();
+        if($existe){
+            return json_encode(Produto::where('codigo', $request->codigo)->first());
+        }else{
+            return json_encode(false);
+        }
+        
     }
     public function vender(Request $request)
     {
@@ -161,6 +167,21 @@ class ClienteProdutoC extends Controller
             //pega o valor total que aquele cliente gastou no mes atual desse ano
             $promocao = ClientePromocao::verficarPromocao($request);
         }
+
+        //verfica descontos,caso haja desconto, não tem promocao
+        if($request->desconto != null && $request->desconto != 0){
+            $valor_total = $request->valor_total - $request->desconto;
+        }else if($promocao && ($request->desconto == null || $request->desconto == 0)){//caso haja promocao sem desconto a promocao ocorre 
+            $promocao = Promocao::find(1);
+            $valor_total = $request->valor_total * ((100 - $promocao->desconto_porcento)/100);
+        }else{//caso nao haja nenhuma de ambas o valor vem bruto
+            $valor_total = $request->valor_total;
+        }
+
+        if($request->valor_recebido < $valor_total){
+            return json_encode("erro 3");
+        }
+
         //recebe um array de codigos
         $codigos = $request->codigos;
         //quantidade a ser vendida, respetiva aoa array de codigos
@@ -179,32 +200,21 @@ class ClienteProdutoC extends Controller
                     $alterar->quantidade *= (-1);
                 }
             }else{
-                $valor_bruto[] += $peso_venda->valor_compra * ((double)$request->pesos[$i]*1000);
+                // $valor_bruto[] += $peso_venda->valor_compra * ((double)$request->pesos[$i]*1000);
+                $valor_bruto[] += $alterar->valor_compra * ((double)$request->pesos[$i]*1000);
+                $alterar->peso -= $request->pesos[$i];
             }
             //salva alteração
             $alterar->save();
         }
         //somar peso total
-        for($i=0; $i < count($request->pesos); $i++){
-            $peso_total += (double)$request->pesos[$i]; 
-        }
+        // for($i=0; $i < count($request->pesos); $i++){
+        //     $peso_total += (double)$request->pesos[$i]; 
+        // }
 
-        //verfica descontos,caso haja desconto, não tem promocao
-        if($request->desconto != null && $request->desconto != 0){
-            $valor_total = $request->valor_total - $request->desconto;
-        }else if($promocao && ($request->desconto == null || $request->desconto == 0)){//caso haja promocao sem desconto a promocao ocorre 
-            $promocao = Promocao::find(1);
-            $valor_total = $request->valor_total * ((100 - $promocao->desconto_porcento)/100);
-        }else{//caso nao haja nenhuma de ambas o valor vem bruto
-            $valor_total = $request->valor_total;
-        }
-
-        if($request->valor_recebido < $valor_total){
-            return json_encode("erro 3");
-        }
-        if($peso_total > $peso_venda->peso_total){
-            return json_encode("erro 4");
-        }
+        // if($peso_total > $peso_venda->peso_total){
+        //     return json_encode("erro 4");
+        // }
         // $codigos_unicos = array_unique($codigos, SORT_REGULAR);
         $cont = 0;
         foreach ($codigos as $value) {
@@ -239,8 +249,8 @@ class ClienteProdutoC extends Controller
             ]);
             DB::statement('SET FOREIGN_KEY_CHECKS=1;');
         }
-        $peso_venda->peso_total = $peso_venda->peso_total - (double)$peso_total; 
-        $peso_venda->save();
+        // $peso_venda->peso_total = $peso_venda->peso_total - (double)$peso_total; 
+        // $peso_venda->save();
         
 
         if($request->cliente_id != null && $request->cliente_id > 1){
@@ -284,9 +294,10 @@ class ClienteProdutoC extends Controller
         foreach($vendas as $value){
             $produto = Produto::where('codigo', $value->codigo)->first();
             $produto->quantidade += $value->quantidade_vendida;
+            $produto->peso += $value->peso_vendido;
             $produto->save();
-            $peso_venda->peso_total += $value->peso_vendido;
-            $peso_venda->save();
+            // $peso_venda->peso_total += $value->peso_vendido;
+            // $peso_venda->save();
             ClienteProduto::where('id', $value->id_venda)->forceDelete();
         }
         return json_encode(true);

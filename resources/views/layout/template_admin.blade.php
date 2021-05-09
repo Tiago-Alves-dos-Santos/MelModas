@@ -73,11 +73,11 @@
                         <a href="{{route('relatorio.inicio')}}"><i class="fas fa-file-invoice-dollar"></i>Relatório </a>
                     </li>
                     @endif
-                    @if(session('tipo') == session('tipo_users.0'))
+                    {{-- @if(session('tipo') == session('tipo_users.0'))
                     <li>
                         <a href="{{route('peso.ajax.revisarPeso')}}" id="reconfigurar-peso"><i class="fas fa-sync-alt"></i>Reconfigurar Peso </a>
                     </li>
-                    @endif
+                    @endif --}}
 
                     <li>
                         @if(isset($_SERVER['HTTP_REFERER']))
@@ -86,7 +86,7 @@
                     </li>
 
                     <li>
-                        <a href="#" style=" color:red" id="info_caixa">
+                        <a href="{{route('caixa.view.index')}}" style=" color:red" id="info_caixa">
                             Caixa fechado
                         </a>
                     </li>
@@ -143,7 +143,7 @@
 
     <script>
         
-    setInterval(function () {
+    // setInterval(function () {
         $.ajax({
             type: 'GET',
             url: "{{route('cliente.ajax.aniversariantes')}}",
@@ -164,7 +164,7 @@
                 console.log(e);
             }
         });
-    },10000);
+    // },10000);
 
     $.ajax({
         type: 'GET',
@@ -210,30 +210,30 @@
     });
 
     //comentar requisição abaixo caso loja nao use peso igual logica do açai
-    $tempo = localStorage.setItem('tempo_peso_alerta', 60000);
-    setInterval(function () {
-        $.ajax({
-            type: 'GET',
-            url: "{{route('peso.ajax.alert')}}",
-            success: function(e){
-                if(e != "false" && e > 0){
-                    $.msgbox({
-                    'message': "O peso total esta em estado de alerta. Atingindo a quantidade de "+e+"Kg "
-                    });
-                }else if(e == 0){
-                    $.msgbox({
-                    'message': "O peso total atingiu a quantidade de 0Kg! Solicite reabastecimento! Vendas Bloqueadas!",
-                    'type': "error",
-                    });
-                }else{
-                    //peso esta em ordem
-                }
-            },
-            error: function(e){
-                console.log(e);
-            }
-        });
-    },localStorage.getItem('tempo_peso_alerta'));
+    // $tempo = localStorage.setItem('tempo_peso_alerta', 60000);
+    // setInterval(function () {
+    //     $.ajax({
+    //         type: 'GET',
+    //         url: "{{route('peso.ajax.alert')}}",
+    //         success: function(e){
+    //             if(e != "false" && e > 0){
+    //                 $.msgbox({
+    //                 'message': "O peso total esta em estado de alerta. Atingindo a quantidade de "+e+"Kg "
+    //                 });
+    //             }else if(e == 0){
+    //                 $.msgbox({
+    //                 'message': "O peso total atingiu a quantidade de 0Kg! Solicite reabastecimento! Vendas Bloqueadas!",
+    //                 'type': "error",
+    //                 });
+    //             }else{
+    //                 //peso esta em ordem
+    //             }
+    //         },
+    //         error: function(e){
+    //             console.log(e);
+    //         }
+    //     });
+    // },localStorage.getItem('tempo_peso_alerta'));
 
 
 

@@ -106,7 +106,7 @@ $objeto = ["id" => 0, "data" => null];
                         <td>{{$venda->nv_vl_unitario * ($venda->peso_vendido * 1000)}}</td>
                         @elseif ($venda->nv_vl_unitario <= 0 && $venda->peso_vendido !=0)
                         <td>{{$venda->valor_venda}} p/g</td>
-                        <td>{{$peso_banco->valor_venda * ($venda->peso_vendido * 1000)}}</td>
+                        <td>{{$venda->valor_venda * ($venda->peso_vendido * 1000)}}</td>
                         @elseif ($venda->nv_vl_unitario <= 0 && $venda->peso_vendido ==0)
                         <td>{{$venda->valor_venda}}</td>
                         <td>{{$venda->valor_venda * $venda->quantidade_vendida}}</td>
@@ -182,7 +182,7 @@ $objeto = ["id" => 0, "data" => null];
                          <td>{{$venda->nv_vl_unitario * ($venda->peso_vendido * 1000)}}</td>
                          @elseif ($venda->nv_vl_unitario <= 0 && $venda->peso_vendido !=0)
                          <td>{{$venda->valor_venda}} p/g</td>
-                         <td>{{$peso_banco->valor_venda * ($venda->peso_vendido * 1000)}}</td>
+                         <td>{{$venda->valor_venda * ($venda->peso_vendido * 1000)}}</td>
                          @elseif ($venda->nv_vl_unitario <= 0 && $venda->peso_vendido ==0)
                          <td>{{$venda->valor_venda}}</td>
                          <td>{{$venda->valor_venda * $venda->quantidade_vendida}}</td>
@@ -232,7 +232,7 @@ $objeto = ["id" => 0, "data" => null];
                         {{-- <td>{{ ($intervalo->m + 1)}} mês(meses)</td> --}}
                         <td>{{date('d/m/Y')}}</td>
                         <td>{{$peso_total}} Kg</td>
-                        {{-- <td>{{$peso_banco->peso_total}} Kg</td> --}}
+                        {{-- <td>{{$venda->peso_total}} Kg</td> --}}
                     </tr>
                 </tbody>
             </table>

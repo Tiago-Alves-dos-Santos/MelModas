@@ -30,13 +30,13 @@
         </div>
 
         <form id="form_vender" novalidate action="action.php"  method="post">
-            <input type="hidden" name="id_cliente" value="1" id="id_cliente"/>
-            <!--
+            {{-- <input type="hidden" name="id_cliente" value="1" id="id_cliente"/> --}}
+            {{-- <!-- --}}
           <fieldset>
             <h2>Selecione o cliente</h2>
             <div class="form-row">
                 {{-- Input important --}}
-                <input type="hidden" name="id_cliente" value="" id="id_cliente"/>
+                <input type="hidden" name="id_cliente" value="1" id="id_cliente"/>
                 {{-- Input important --}}
                 <div class="col-md-5">
                     <label for="email">Nome:</label>
@@ -66,18 +66,18 @@
             </div>
             <div class="form-row">
                 <div class="col-md-12 proxima">
-                    <input type="button" name="password" class="next btn btn-success" value="Seguir" style="top:10px" />
+                    <input type="button" name="password" class="next btn btn-success btn-lg" value="Seguir" style="top:10px" />
                 </div>
             </div>
           </fieldset>
-        -->
-        <style>
-            .fonte{
-                font-size:18px;
-                font-weight: bold;
-            }
-        </style>
+        {{-- --> --}}
           <fieldset id="fild_adicionar">
+            <style>
+                .fonte{
+                    font-size:18px;
+                    font-weight: bold;
+                }
+            </style>
             <h2>Lista de Produtos - <span class="text-success">Total:</span>
                 <span class="text-success" id="total-venda"></span>
                 <span class="text-danger" id="promocao"></span>
@@ -136,7 +136,7 @@
             <div class="form-row">
                 <div class="col-md-12 proxima">
                     <input type="button" name="password" class="next btn btn-success btn-lg" value="Seguir" />
-                    {{-- <input type="button" name="previous" class="previous btn btn-default" value="Voltar" style="right: 100px"/> --}}
+                    <input type="button" name="previous" class="previous btn btn-default btn-lg" value="Voltar" style="right: 115px"/>
                 </div>
             </div>
           </fieldset>
@@ -265,7 +265,7 @@ $("input#codigo-input").on('keydown keyup', function(e){
     let quantidade_vender = $("input#quantidade-input").val();
     let valor_novo = $("#vlUnitario").val();
     let quantidade_grama = $("#grama").val();
-    let peso_venda = parseFloat("{{$peso_venda->valor_venda}}");
+    // let peso_venda = parseFloat("{{$peso_venda->valor_venda}}");
     cont++;
     if(cont == 2){
         cont = 0;
@@ -279,6 +279,13 @@ $("input#codigo-input").on('keydown keyup', function(e){
             "_token": "{{ csrf_token() }}",
         },
         success: function(e){
+            if(e == "false"){
+                $.msgbox({
+                'message': "Código não encotrado",
+                'type': "error",
+                });
+                return;
+            }
             let produto = JSON.parse(e);
             let calc = 0;
             if(valor_novo > 0 && produto.peso != null){
@@ -291,8 +298,8 @@ $("input#codigo-input").on('keydown keyup', function(e){
                 calc = produto.valor_venda*quantidade_vender;
                 $("table#tabela-lista-produtos tbody").append("<tr data-id=''><td>"+produto.id+"</td><td class='codigo-valor'>"+produto.codigo+"</td><td>"+produto.nome+"</td><td>"+produto.marca+"</td><td class='vl-unitario'>"+produto.valor_venda+"</td><td class='quantidade_venda'>"+quantidade_vender+"</td><td class='quantidade_grama'>"+quantidade_grama+"</td><td class='total-valor'>"+calc.toFixed(2)+"</td><td><a href='' class='btn btn-danger excluir-produto' data-total='"+calc.toFixed(2)+"' >Remover</a></td></tr>");
             }else if(!valor_novo && produto.peso != null){
-                calc = peso_venda*(quantidade_grama * 1000);
-                $("table#tabela-lista-produtos tbody").append("<tr data-id=''><td>"+produto.id+"</td><td class='codigo-valor'>"+produto.codigo+"</td><td>"+produto.nome+"</td><td>"+produto.marca+"</td><td class='vl-unitario'>"+peso_venda+"</td><td class='quantidade_venda'>"+quantidade_vender+"</td><td class='quantidade_grama'>"+quantidade_grama+"</td><td class='total-valor'>"+calc.toFixed(2)+"</td><td><a href='' class='btn btn-danger excluir-produto' data-total='"+calc.toFixed(2)+"' >Remover</a></td></tr>");
+                calc = produto.valor_venda*(quantidade_grama * 1000);
+                $("table#tabela-lista-produtos tbody").append("<tr data-id=''><td>"+produto.id+"</td><td class='codigo-valor'>"+produto.codigo+"</td><td>"+produto.nome+"</td><td>"+produto.marca+"</td><td class='vl-unitario'>"+produto.valor_venda+"</td><td class='quantidade_venda'>"+quantidade_vender+"</td><td class='quantidade_grama'>"+quantidade_grama+"</td><td class='total-valor'>"+calc.toFixed(2)+"</td><td><a href='' class='btn btn-danger excluir-produto' data-total='"+calc.toFixed(2)+"' >Remover</a></td></tr>");
             }
             let valores = $("td.total-valor");
             let total=0;
@@ -331,7 +338,7 @@ $("a#add-produto").on('click', function(e){
     let quantidade_vender = $("input#quantidade-input").val();
     let valor_novo = $("#vlUnitario").val();
     let quantidade_grama = $("#grama").val();
-    let peso_venda = parseFloat("{{$peso_venda->valor_venda}}");
+    // let peso_venda = parseFloat("{{$peso_venda->valor_venda}}");
     $.ajax({
         url: "{{route('venda.ajax.addProduto')}}",
         type: 'POST',
@@ -340,10 +347,19 @@ $("a#add-produto").on('click', function(e){
             "_token": "{{ csrf_token() }}",
         },
         complete:function(e){
-            $("#load_add").hide();
-            $(this).prop('false',true);
+            if(e != "false"){
+                $("#load_add").hide();
+                $(this).prop('disabled',false);
+            }
         },
         success: function(e){
+            if(e == "false"){
+                $.msgbox({
+                'message': "Código não encotrado",
+                'type': "error",
+                });
+                return;
+            }
             let produto = JSON.parse(e);
             let calc = 0;
             if(valor_novo > 0 && produto.peso != null){
@@ -356,8 +372,8 @@ $("a#add-produto").on('click', function(e){
                 calc = produto.valor_venda*quantidade_vender;
                 $("table#tabela-lista-produtos tbody").append("<tr data-id=''><td>"+produto.id+"</td><td class='codigo-valor'>"+produto.codigo+"</td><td>"+produto.nome+"</td><td>"+produto.marca+"</td><td class='vl-unitario'>"+produto.valor_venda+"</td><td class='quantidade_venda'>"+quantidade_vender+"</td><td class='quantidade_grama'>"+quantidade_grama+"</td><td class='total-valor'>"+calc.toFixed(2)+"</td><td><a href='' class='btn btn-danger excluir-produto' data-total='"+calc.toFixed(2)+"' >Remover</a></td></tr>");
             }else if(!valor_novo && produto.peso != null){
-                calc = peso_venda*(quantidade_grama * 1000);
-                $("table#tabela-lista-produtos tbody").append("<tr data-id=''><td>"+produto.id+"</td><td class='codigo-valor'>"+produto.codigo+"</td><td>"+produto.nome+"</td><td>"+produto.marca+"</td><td class='vl-unitario'>"+peso_venda+"</td><td class='quantidade_venda'>"+quantidade_vender+"</td><td class='quantidade_grama'>"+quantidade_grama+"</td><td class='total-valor'>"+calc.toFixed(2)+"</td><td><a href='' class='btn btn-danger excluir-produto' data-total='"+calc.toFixed(2)+"' >Remover</a></td></tr>");
+                calc = produto.valor_venda*(quantidade_grama * 1000);
+                $("table#tabela-lista-produtos tbody").append("<tr data-id=''><td>"+produto.id+"</td><td class='codigo-valor'>"+produto.codigo+"</td><td>"+produto.nome+"</td><td>"+produto.marca+"</td><td class='vl-unitario'>"+produto.valor_venda+"</td><td class='quantidade_venda'>"+quantidade_vender+"</td><td class='quantidade_grama'>"+quantidade_grama+"</td><td class='total-valor'>"+calc.toFixed(2)+"</td><td><a href='' class='btn btn-danger excluir-produto' data-total='"+calc.toFixed(2)+"' >Remover</a></td></tr>");
             }
             let valores = $("td.total-valor");
             let total=0;
@@ -439,6 +455,13 @@ $("input#btn-venda").on('click', function(e){
     let desconto = $("input#desconto").val();
     let descricao = $("#descricao").val();
     let forma_pagamento = $("select#forma_pagamento").val();
+    if(forma_pagamento ==""){
+        $.msgbox({
+                'message': "Selecione a forma de pagamento",
+                'type': "error",
+                });
+                return;
+    }
     let valor_total = parseFloat($("span#total-venda").html());
     $("div#load-page").fadeIn('fast');
     $.ajax({

@@ -49,7 +49,7 @@ $objeto = ["id" => 0, "data" => null];
             <div class="row">
                 <div class="col-md-12">
                     <h1 style="text-align: center;" class="fonte">
-                        <span style="color: purple">Açaí</span><span style="color: orangered">&</span><span style="color: green">Mix</span>
+                        <span>Mel Modas</span>
                     </h1>
                 </div>
             </div>
@@ -113,7 +113,7 @@ $objeto = ["id" => 0, "data" => null];
                          </h5>
                         @php
                         if($item->quantidade_vendida == null){
-                            $total += ($peso_venda->valor_venda * ($item->peso_vendido * 1000));
+                            $total += ($item->valor_venda * ($item->peso_vendido * 1000));
                         }else{
                             $total += ($item->quantidade_vendida * $item->valor_venda);
                         }

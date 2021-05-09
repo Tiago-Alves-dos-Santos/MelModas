@@ -21,8 +21,8 @@ div#produto-existente h3{
     </div>
     <div class="form-row">
         <div class="col-md-12">
-            <label>Alterar peso(Kg): <span class="text-danger">*</span></label>
-            <input type="number" value="{{$produto->peso}}" name="peso_venda" step="0.001" min="0.001"  class="form-control"/>
+            <label>Adicionar peso(Kg): <span class="text-danger">*</span></label>
+            <input type="number" value="" name="peso_venda" step="0.001" min="0.001"  class="form-control"/>
         </div>
     </div>
     <div class="form-row">
@@ -51,13 +51,17 @@ div#produto-existente h3{
                 </div>
                 <div class="col-md-6">
                     <ul style="list-style-type: none">
-                        @if ($produto->peso == null)
+                        {{-- @if ($produto->peso == null)
                         <li><span style="font-weight: bold">Valor(Compra) R$:</span> {{$produto->valor_compra}}</li>
                         <li><span style="font-weight: bold">Valor(Venda) R$:</span> {{$produto->valor_venda}}</li>
                         @else
                         <li><span style="font-weight: bold">Valor Grama(Compra) R$:</span> {{$peso_venda->valor_compra}}</li>
                         <li><span style="font-weight: bold">Valor Grama(Venda) R$:</span> {{$peso_venda->valor_venda}}</li>  
-                        @endif
+                        @endif --}}
+
+                        {{-- logica de peso diferente de peso total, para peso total use a logica acima --}}
+                        <li><span style="font-weight: bold">Valor(Compra) R$:</span> {{$produto->valor_compra}}</li>
+                        <li><span style="font-weight: bold">Valor(Venda) R$:</span> {{$produto->valor_venda}}</li>
                         
 
                         
