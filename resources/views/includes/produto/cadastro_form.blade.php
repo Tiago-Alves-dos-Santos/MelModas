@@ -12,18 +12,24 @@
     </div>
     <div class="form-row">
         <div class="col-md-6">
-            <label>Valor(Compra): <span class="text-danger">*</span></label>
-            <input type="number" name="valor_compra" placeholder="35." class="form-control" min="1" step="0.01"/>
+            <label>Valor(Compra): </label>
+            <input type="number" name="valor_compra" placeholder="35.00" class="form-control" step="0.0001"/>
         </div>
         <div class="col-md-6">
-            <label>Valor(Venda): <span class="text-danger">*</span></label>
-            <input type="number" name="valor_venda" placeholder="35.50" class="form-control" required min="1" step="0.01"/>
+            <label>Valor(Venda): </label>
+            <input type="number" name="valor_venda" placeholder="35.50" class="form-control" step="0.0001"/>
         </div>
     </div>
     <div class="form-row">
         <div class="col-md-12">
-            <label>Quantidade: <span class="text-danger">*</span></label>
-            <input type="number" min="1" step="1" name="quantidade" placeholder="5" class="form-control" required/>
+            <label>Entrada Peso(Kg): </label>
+            <input type="number" name="peso_entrada" placeholder="35" class="form-control" step="0.001"/>
+        </div>
+    </div>
+    <div class="form-row">
+        <div class="col-md-12">
+            <label>Quantidade: </label>
+            <input type="number" step="1" name="quantidade" placeholder="5" class="form-control"/>
         </div>
     </div>
     <div class="form-row">

@@ -11,6 +11,7 @@
                             <td>Marca</td>
                             <td>Valor Unitario(R$)</td>
                             <td>Quantidade</td>
+                            <td>Gramas</td>
                             <td>Total(R$)</td>
                             <td>Remoção</td>
                         </tr>

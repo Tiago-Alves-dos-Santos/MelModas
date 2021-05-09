@@ -15,14 +15,14 @@ class Login
      */
     public function handle($request, Closure $next)
     {
-        if (session()->has('login') == false || !session('login')) {
+        if (session('login') == false) {
             //cria uma msg vazia ou null, nenhuma msg de aviso é criada
-                if(session()->has('msg') == false){
-                    session(['msg' => [
-                        'tipo' => 'alerta',
-                        'texto' => 'Realize o login para ter acesso ao sistema!'
-                    ]]);
-                }
+                // if(session()->has('msg') == false){
+                //     session(['msg' => [
+                //         'tipo' => 'alerta',
+                //         'texto' => 'Realize o login para ter acesso ao sistema!'
+                //     ]]);
+                // }
             //
             return redirect()->route('inicio');
         }

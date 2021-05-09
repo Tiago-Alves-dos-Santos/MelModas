@@ -42,6 +42,7 @@ $objeto = ["id" => 0, "data" => null];
                     <div class="aviso">
                         <h1 style="text-align:  center">Aviso!</h1>
                         <p>O total acumulado de vendas 'fiado em andamento' não são subtraidas automáticamentes do total acumulado de vendas!</p>
+                        <p>Vendas 'permutas' não são adicionadas ao total obitido ou ao lucro!</p>
                     </div>
                 </div>
             </div>
@@ -59,7 +60,7 @@ $objeto = ["id" => 0, "data" => null];
                     </td>
                 </tr>
             </table>
-
+            @if (count($vendas_fiados_andamento) > 0)
             <table border="" style="width: 100%; margin: 10px 0">
                 <tr>
                     <td style="background-color: red;">
@@ -67,14 +68,18 @@ $objeto = ["id" => 0, "data" => null];
                     </td>
                 </tr>
             </table>
-
-
+            @endif
+            @php
+                $peso_total = 0;
+            @endphp
+            @if (count($vendas_fiados_andamento) > 0)
             <table border="" style="width: 100%; margin: 10px 0">
                 <thead style="background-color: rgba(206, 41, 41, .5); color:white">
                     <tr>
                         <td>Código</td>
                         <td>Nome</td>
                         <td>Quantidade Vendida</td>
+                        <td>Gramas</td>
                         <td>Valor Unitário(R$)</td>
                         <td>Total(R$)</td>
                         <td>Estado</td>
@@ -89,15 +94,25 @@ $objeto = ["id" => 0, "data" => null];
                         <td>{{$venda->codigo}}</td>
                         <td>{{$venda->nome}}</td>
                         <td style="text-align: center">{{$venda->quantidade_vendida}}</td>
-                        @if($venda->nv_vl_unitario > 0)
+                        <td>{{$venda->peso_vendido}}kg</td>
+                        @php
+                            $peso_total += $venda->peso_vendido;
+                        @endphp
+                        @if($venda->nv_vl_unitario > 0 && $venda->peso_vendido ==0)
                         <td>{{$venda->nv_vl_unitario}}</td>
                         <td>{{$venda->nv_vl_unitario * $venda->quantidade_vendida}}</td>
-                        @else
+                        @elseif ($venda->nv_vl_unitario > 0 && $venda->peso_vendido !=0)
+                        <td>{{$venda->nv_vl_unitario}} p/g</td>
+                        <td>{{$venda->nv_vl_unitario * ($venda->peso_vendido * 1000)}}</td>
+                        @elseif ($venda->nv_vl_unitario <= 0 && $venda->peso_vendido !=0)
+                        <td>{{$venda->valor_venda}} p/g</td>
+                        <td>{{$peso_banco->valor_venda * ($venda->peso_vendido * 1000)}}</td>
+                        @elseif ($venda->nv_vl_unitario <= 0 && $venda->peso_vendido ==0)
                         <td>{{$venda->valor_venda}}</td>
                         <td>{{$venda->valor_venda * $venda->quantidade_vendida}}</td>
                         @endif
                         <td>{{$venda->estado_compra}}</td>
-                        <td>{{date('d/m/Y H:i:s', strtotime($venda->created_at))}}</td>
+                        <td>{{date('d/m/Y H:i:s', strtotime($venda->criado))}}</td>
                         <td>{{$venda->parcelamento}}/12</td>
                         <td>{{$venda->forma_pagamento}}</td>
                     </tr>
@@ -108,7 +123,7 @@ $objeto = ["id" => 0, "data" => null];
                     @endforelse
                 </tbody>
             </table>
-
+            @endif
 
 
 
@@ -120,6 +135,19 @@ $objeto = ["id" => 0, "data" => null];
                 </tr>
             </table>
 
+            <table border="" style="width: 100%; margin: 10px 0">
+                <tr>
+                    <td style="background-color: green; color:white">
+                        <h5>Concluído</h5>
+                    </td>
+                    <td style="background-color: orange; color:white">
+                        <h5>Andamento</h5>
+                    </td>
+                    <td style="background-color: #032a77; color:white">
+                        <h5>Permuta</h5>
+                    </td>
+                </tr>
+            </table>
 
             <table border="" style="width: 100%; margin: 10px 0">
                 <thead style="background-color: rgba(33, 66, 3,.5); color:white">
@@ -127,6 +155,7 @@ $objeto = ["id" => 0, "data" => null];
                         <td>Código</td>
                         <td>Nome</td>
                         <td>Quantidade Vendida</td>
+                        <td>Gramas</td>
                         <td>Valor Unitário(R$)</td>
                         <td>Total(R$)</td>
                         <td>Estado</td>
@@ -141,17 +170,33 @@ $objeto = ["id" => 0, "data" => null];
                         <td>{{$venda->codigo}}</td>
                         <td>{{$venda->nome}}</td>
                         <td>{{$venda->quantidade_vendida}}</td>
-                        @if($venda->nv_vl_unitario > 0)
-                        <td>{{$venda->nv_vl_unitario}}</td>
-                        <td>{{$venda->nv_vl_unitario * $venda->quantidade_vendida}}</td>
-                        @else
-                        <td>{{$venda->valor_venda}}</td>
-                        <td>{{$venda->valor_venda * $venda->quantidade_vendida}}</td>
-                        @endif
+                        <td>{{$venda->peso_vendido}}kg</td>
+                        @php
+                            $peso_total += $venda->peso_vendido;
+                        @endphp
+                         @if($venda->nv_vl_unitario > 0 && $venda->peso_vendido ==0)
+                         <td>{{$venda->nv_vl_unitario}}</td>
+                         <td>{{$venda->nv_vl_unitario * $venda->quantidade_vendida}}</td>
+                         @elseif ($venda->nv_vl_unitario > 0 && $venda->peso_vendido !=0)
+                         <td>{{$venda->nv_vl_unitario}} p/g</td>
+                         <td>{{$venda->nv_vl_unitario * ($venda->peso_vendido * 1000)}}</td>
+                         @elseif ($venda->nv_vl_unitario <= 0 && $venda->peso_vendido !=0)
+                         <td>{{$venda->valor_venda}} p/g</td>
+                         <td>{{$peso_banco->valor_venda * ($venda->peso_vendido * 1000)}}</td>
+                         @elseif ($venda->nv_vl_unitario <= 0 && $venda->peso_vendido ==0)
+                         <td>{{$venda->valor_venda}}</td>
+                         <td>{{$venda->valor_venda * $venda->quantidade_vendida}}</td>
+                         @endif
                         <td>{{$venda->estado_compra}}</td>
-                        <td>{{date('d/m/Y H:i:s', strtotime($venda->created_at))}}</td>
+                        <td>{{date('d/m/Y H:i:s', strtotime($venda->criado))}}</td>
                         <td>{{$venda->parcelamento}}/12</td>
-                        <td>{{$venda->forma_pagamento}}</td>
+                        @if ($venda->forma_pagamento == "permuta")
+                        <td style="background-color: #032a77; color:white">{{$venda->forma_pagamento}}</td>
+                        @elseif($venda->forma_pagamento == "A vista" || $venda->estado_compra == "concluida")
+                        <td style="background-color: green; color:white">{{$venda->forma_pagamento}}</td>
+                        @elseif($venda->estado_compra == "andamento")
+                        <td style="background-color: orange; color:white">{{$venda->forma_pagamento}}</td> 
+                        @endif
                     </tr>
                     @empty
                         <tr style="border-bottom: 2px solid black">
@@ -169,6 +214,8 @@ $objeto = ["id" => 0, "data" => null];
                         <td>Data de final</td>
                         <td>Intervalo</td>
                         <td>Data de emissão</td>
+                        <td>Peso Vendido</td>
+                        {{-- <td>Peso Restante ({{date('d/m/Y')}}) </td> --}}
                     </tr>
                 </thead>
                 <tbody>
@@ -184,6 +231,8 @@ $objeto = ["id" => 0, "data" => null];
                         <td>{{ ($intervalo->m == 0) ?0:$intervalo->m}} mês(meses)</td>
                         {{-- <td>{{ ($intervalo->m + 1)}} mês(meses)</td> --}}
                         <td>{{date('d/m/Y')}}</td>
+                        <td>{{$peso_total}} Kg</td>
+                        {{-- <td>{{$peso_banco->peso_total}} Kg</td> --}}
                     </tr>
                 </tbody>
             </table>

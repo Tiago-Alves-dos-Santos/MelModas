@@ -12,6 +12,7 @@
                             <td>Valor(Compra)</td>
                             <td>Valor(Venda)</td>
                             <td>Quantidade</td>
+                            <td>Peso Kg</td>
                             <td>Ações</td>
                         </tr>
                     </thead>
@@ -25,6 +26,7 @@
                             <td>{{$produto->valor_compra}}</td>
                             <td>{{$produto->valor_venda}}</td>
                             <td>{{$produto->quantidade}}</td>
+                            <td>{{$produto->peso}}</td>
                             <td>
                                 <a href="{{route('produto.view.alterar', [
                                     'id' => base64_encode($produto->id),

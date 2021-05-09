@@ -15,6 +15,7 @@
         "laravel/tinker": "^2.5",
         "picqer/php-barcode-generator": "^2.1",
         "simplesoftwareio/simple-qrcode": "~4",
+        "spatie/db-dumper": "^2.21",
         "yadakhov/insert-on-duplicate-key": "^1.2"
     },
     "require-dev": {

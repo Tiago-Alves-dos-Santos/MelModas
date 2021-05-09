@@ -11,6 +11,12 @@ $objeto = ["id" => 0, "data" => null];
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
         <style>
+            
+        /* @font-face {
+            font-family: 'maquina';
+            /* src: url('http://localhost:8000/fonts/maquina.ttf') format('truetype'); */
+            /* src: url({{storage_path('fonts/maquina.ttf')}}) format('truetype'); */
+        } */
         .page-break {
             page-break-after: always;
         }
@@ -21,6 +27,10 @@ $objeto = ["id" => 0, "data" => null];
             background-position: center;
             background-repeat: no-repeat;
             opacity: 0.3;
+            /* font-family: 'examplefont'; */
+        }
+        .fonte{
+            /* font-family: 'examplefont'; */
         }
         div#fundo{
             position: absolute;
@@ -38,7 +48,9 @@ $objeto = ["id" => 0, "data" => null];
         <div class="container">
             <div class="row">
                 <div class="col-md-12">
-                    <h1 style="text-align: center;">R&R</h1>
+                    <h1 style="text-align: center;" class="fonte">
+                        <span style="color: purple">Açaí</span><span style="color: orangered">&</span><span style="color: green">Mix</span>
+                    </h1>
                 </div>
             </div>
             <div class="row">
@@ -58,7 +70,7 @@ $objeto = ["id" => 0, "data" => null];
             </div> --}}
             <div class="row">
                 <div class="col-md-12">
-                        <h5 class="font-pixel">Código // Nome // quantidade * valor = total</h5>
+                        <h5 class="font-pixel">Código // Nome // quantidade(Peso) * valor = total</h5>
                         <h5>@php echo str_repeat("*", 20) @endphp</h5>
                 </div>
             </div>
@@ -69,13 +81,43 @@ $objeto = ["id" => 0, "data" => null];
                         $objeto["id"] = $item->id;
                         $objeto["data"] = $item->created_at;
                         @endphp
-                        <h5 class="font-pixel">{{$item->codigo}} // {{$item->nome}} // {{$item->quantidade_vendida}} * {{
-                        ($item->nv_vl_unitario > 0)?$item->nv_vl_unitario:$item->valor_venda
-                        }} = {{ 
-                            ($item->quantidade_vendida * (($item->nv_vl_unitario > 0)?$item->nv_vl_unitario:$item->valor_venda))
-                         }}</h5>
+                        <h5 class="font-pixel">
+                            {{$item->codigo}} // {{$item->nome}} // 
+                        @if ($item->quantidade_vendida == null)
+                            {{$item->peso_vendido}}(kg)
+                        @else
+                            {{$item->quantidade_vendida}} 
+                        @endif
+                        
+                        * 
+                        @if ($item->nv_vl_unitario > 0 && $item->peso_vendido != 0)
+                            {{$item->nv_vl_unitario}} p/g
+                        @elseif($item->nv_vl_unitario > 0 && $item->peso_vendido == 0)
+                            {{$item->nv_vl_unitario}} 
+                        @elseif(!($item->nv_vl_unitario > 0 ) && $item->peso_vendido != 0)
+                            {{$peso_venda->valor_venda}} p/g
+                        @else
+                            {{$item->valor_venda}} 
+                        @endif
+                         = 
+
+                        @if ($item->nv_vl_unitario > 0 && $item->peso_vendido != 0)
+                         {{$item->nv_vl_unitario * ($item->peso_vendido * 1000)}}
+                        @elseif($item->nv_vl_unitario > 0 && $item->peso_vendido == 0)
+                            {{$item->nv_vl_unitario * $item->quantidade_vendida}}
+                        @elseif(!($item->nv_vl_unitario > 0 ) && $item->peso_vendido != 0)
+                            {{$peso_venda->valor_venda * ($item->peso_vendido * 1000)}}
+                        @else
+                            {{$item->valor_venda * $item->quantidade_vendida}}   
+                        @endif
+                         </h5>
                         @php
-                        $total += ($item->quantidade_vendida * $item->valor_venda);
+                        if($item->quantidade_vendida == null){
+                            $total += ($peso_venda->valor_venda * ($item->peso_vendido * 1000));
+                        }else{
+                            $total += ($item->quantidade_vendida * $item->valor_venda);
+                        }
+                        // $total += ($item->quantidade_vendida * $item->valor_venda);
                         @endphp
                         <h5>@php echo str_repeat("-", 35) @endphp</h5>
                     @empty

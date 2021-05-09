@@ -29,17 +29,21 @@
     <div class="form-row">
         <div class="col-md-6">
             <label>Valor(Compra):</label>
-            <input type="number" name="valor_compra" placeholder="35." class="form-control" min="1" step="0.01" value="{{$produto->valor_compra}}"/>
+            <input type="number" name="valor_compra" placeholder="35.67" class="form-control" min="0" step="0.001" value="{{$produto->valor_compra}}"/>
         </div>
         <div class="col-md-6">
             <label>Valor(Venda):</label>
-            <input type="number" name="valor_venda" placeholder="35.50" class="form-control" required min="1" step="0.01" value="{{$produto->valor_venda}}"/>
+            <input type="number" name="valor_venda" placeholder="35.50" class="form-control" required min="0" step="0.001" value="{{$produto->valor_venda}}"/>
         </div>
     </div>
     <div class="form-row">
-        <div class="col-md-12">
+        <div class="col-md-6">
             <label>Quantidade:</label>
-            <input type="number" min="1" step="1" name="quantidade" placeholder="5" class="form-control" required value="{{$produto->quantidade}}"/>
+            <input type="number" min="0" step="1" name="quantidade" placeholder="5" class="form-control"  value="{{$produto->quantidade}}"/>
+        </div>
+        <div class="col-md-6">
+            <label>Peso(Kg):</label>
+            <input type="number" step="0.001" min="0" name="peso_venda" placeholder="0.235" class="form-control"  value="{{$produto->peso}}"/>
         </div>
     </div>
     <div class="form-row">

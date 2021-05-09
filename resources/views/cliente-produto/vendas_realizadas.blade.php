@@ -30,6 +30,7 @@
                 <option value="A vista">A vista</option>
                 <option value="cartão">Cartão</option>
                 <option value="fiado">Fiado</option>
+                <option value="permuta">Permuta</option>
             </select>
         </div>
         <div class="col-md-4">

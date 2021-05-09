@@ -1,11 +1,7 @@
 @charset "UTF-8";
-
 /** Cores principais site*/
-
 /** Cores dos textos*/
-
 /*Cores tabela*/
-
 div.scroll {
   width: 100%;
   overflow: auto;
@@ -20,7 +16,7 @@ table thead {
 }
 
 table thead.orange tr {
-  background-color: #055eb7;
+  background-color: #7b3981;
   color: white;
   font-weight: bold;
 }
@@ -30,19 +26,17 @@ table tbody tr {
   background-color: #d6d6d6;
   cursor: pointer;
 }
-
 table tbody tr:hover {
-  background-color: #03386d;
+  background-color: #48224c;
   color: white;
 }
 
 table tbody tr.selecionado {
-  background-color: #03386d;
+  background-color: #48224c;
   color: white;
 }
 
-body,
-html {
+body, html {
   height: 100% !important;
 }
 
@@ -74,12 +68,10 @@ div.row.margim-tp {
 }
 
 /*Paginação*/
-
 div.paginador {
   margin-bottom: 40px;
   margin-top: 0px;
 }
-
 div.paginador nav {
   position: absolute;
   right: 10px;
@@ -88,7 +80,6 @@ div.paginador nav {
 }
 
 /*Estilo do componente load-page das paginas*/
-
 div#load-page {
   position: absolute;
   display: flex;
@@ -104,17 +95,14 @@ div#load-page {
 }
 
 /********************************************Dashboard**************************************************/
-
 /*Menu(navbar) dashboard*/
-
 .navbar-inverse {
-  background-color: #055eb7 !important;
+  background-color: #7b3981 !important;
   border-color: #F0F0F0;
   min-height: 80px;
 }
 
 /*icone do menu navbar*/
-
 .navbar-inverse .navbar-brand {
   color: #777;
 }
@@ -128,22 +116,18 @@ div#load-page {
 }
 
 /* Icones dashboard*/
-
 div.div-square:hover {
-  background-color: #055eb7;
+  background-color: #7b3981;
   color: white;
   transition: 1s;
 }
-
-div.div-square:hover h4,
-div.div-square:hover i {
+div.div-square:hover h4, div.div-square:hover i {
   color: white;
 }
 
 /*Rodape da pagina*/
-
 .footer {
-  background-color: #055eb7 !important;
+  background-color: #7b3981 !important;
   width: 100%;
   color: black;
   padding: 20px 50px 20px 50px;
@@ -151,7 +135,6 @@ div.div-square:hover i {
 }
 
 /********************************************Consultar Clientes****************************************/
-
 .block-text {
   width: 100%;
   border: 4px solid #fc8b02;
@@ -160,13 +143,10 @@ div.div-square:hover i {
   padding: 5px 15px;
   text-align: justify;
 }
-
 .block-text h3 {
   text-align: center;
   color: #ffaa00;
 }
-
 .block-text div#complemento-cliente p {
   text-align: justify;
 }
-

@@ -1,5 +1,6 @@
 <?php
 
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -10,7 +11,6 @@
 | contains the "web" middleware group. Now create something great!
 |
 */
-
 Route::get('/', 'Controller\UsuarioC@viewLogin')->name('inicio');
 
 Route::group( [ 'prefix' => 'admin' ], function()
@@ -21,7 +21,58 @@ Route::group( [ 'prefix' => 'admin' ], function()
     Route::get('/logout/{validate}', 'Controller\UsuarioC@logout')->name('admin.logout');
     //login
     Route::post('/login', 'Controller\UsuarioC@login')->name('admin.login');
+    //view config
+    Route::get('/config', 'Controller\UsuarioC@viewConfig')->name('admin.view.config');
+    //view create
+    Route::get('/view-create', 'Controller\UsuarioC@viewCreate')->name('admin.view.create');
+    //criar usuario
+    Route::post('/create', 'Controller\UsuarioC@create')->name('admin.create');
+    //deletar
+    Route::delete('/deletar', 'Controller\UsuarioC@delete')->name('admin.delete');
 });
+
+Route::group( [ 'prefix' => 'admin/peso' ], function()
+{
+    //tela configuração de peso
+    Route::get('/', 'Controller\PesoVendaC@viewIndex')->name('peso.view.index');
+    //cadastrar ou alterar configuração peso
+    Route::post('/create', 'Controller\PesoVendaC@create')->name('peso.create');
+    //relizar revisao do peso, alterar o peso
+    Route::put('/revisao-peso', 'Controller\PesoVendaC@revisarPeso')->name('peso.ajax.revisarPeso');
+    //verficar se peso esta em uma quantidade alertiva
+    Route::get('/alerta-peso', 'Controller\PesoVendaC@alertaPeso')->name('peso.ajax.alert');
+});
+
+Route::group( [ 'prefix' => 'admin/caixa' ], function()
+{
+    //tela inicial caixa
+    Route::get('/', 'Controller\CaixaC@viewIndex')->name('caixa.view.index');
+    //abrir caixa
+    Route::post('/abrir', 'Controller\CaixaC@open')->name('caixa.abrir');
+    //fechar caixa
+    Route::post('/fechar', 'Controller\CaixaC@close')->name('caixa.close');
+    //reabrir caixa
+    Route::post('/reabrir', 'Controller\CaixaC@reOpen')->name('caixa.reOpen');
+    //deletar caixa
+    Route::post('/deletar', 'Controller\CaixaC@delete')->name('caixa.delete');
+    //verficar
+    Route::get('/check', 'Controller\CaixaC@check')->name('caixa.check');
+
+});
+
+Route::group( [ 'prefix' => 'admin/depositos' ], function()
+{
+    //tela configuração de peso
+    Route::get('/', 'Controller\DepositoC@viewIndex')->name('deposito.view.index');
+    //adcionar despesa
+    Route::get('/cadastrar-depositos','Controller\DepositoC@viewCadastrar')->name('deposito.view.create');
+    //cadastrar
+    Route::post('/create', 'Controller\DepositoC@create')->name('deposito.create');
+    //deletar
+    Route::delete('/delete', 'Controller\DepositoC@delete')->name('deposito.delete');
+});
+
+
 Route::group( [ 'prefix' => 'admin/cliente' ], function()
 {
     //ver clientes(dashboard)
@@ -77,7 +128,7 @@ Route::group( [ 'prefix' => 'admin/produto' ], function()
     //ajax retorna apenas um objeto produto
     Route::post('/getProduto', 'Controller\ProdutoC@getProduto')->name('produto.ajax.getProduto');
     //ajax filtrar produto
-    Route::post('/filtrar', 'Controller\ProdutoC@filtro')->name('produto.ajax.filtrar');
+    Route::any('/filtrar', 'Controller\ProdutoC@filtro')->name('produto.ajax.filtrar');
     //ajax verficar codigo existente do produto
     Route::post('/verificar-codigo', 'Controller\ProdutoC@verificarCodigo')->name('produto.ajax.verficarCodigo');
     //deletar produto

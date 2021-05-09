@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Controller;
 
 use App\Model\Produto;
+use App\Model\PesoVenda;
 use Illuminate\Http\Request;
 use App\Classes\Configuracao;
 use App\Http\Controllers\Controller;
@@ -29,7 +30,7 @@ class ProdutoC extends Controller
         $produtos = Produto::where('codigo', 'like', "%{$request->codigo}%")
         ->where('nome', 'like', "%{$request->nome}%")
         ->where('marca', 'like', "%{$request->marca}%")
-        ->orderBy('nome')->paginate(1);
+        ->orderBy('nome')->paginate(Configuracao::PAGINAS);
         $filtro = $request->except(['_token']);
         $registros = Configuracao::mapPaginate($produtos);
         if($request->ajax()){
@@ -59,7 +60,8 @@ class ProdutoC extends Controller
         $existe = Produto::where('codigo', $request->codigo)->exists();
         if($existe){
             $produto = Produto::where('codigo', $request->codigo)->first();
-            return view('includes.produto.adicionar', compact('produto'));
+            $peso_venda = PesoVenda::find(1);
+            return view('includes.produto.adicionar', compact('produto','peso_venda'));
         }else{
             return view('includes.produto.cadastro_form');
         }
@@ -74,6 +76,7 @@ class ProdutoC extends Controller
     {
         $produto = Produto::find($request->id);
         $produto->quantidade += $request->quantidade;
+        $produto->peso = $request->peso_venda;
         $produto->save();
         return json_encode(true);
     }
@@ -82,15 +85,20 @@ class ProdutoC extends Controller
     {
         $existe = Produto::where('codigo', $request->codigo)->exists();
         if(!$existe){
-            Produto::create([
+            $produto = Produto::create([
                 "codigo" => $request->codigo,
                 "nome" => $request->nome,
                 "marca" => $request->marca,
                 "valor_compra" => $request->valor_compra,
                 "valor_venda"=> $request->valor_venda,
                 "quantidade" => $request->quantidade,
-                "descricao" => $request->descricao
+                "descricao" => $request->descricao,
+                "peso" => $request->peso_entrada
             ]);
+            $produto = $produto->fresh();
+            $pesovenda = PesoVenda::find(1);
+            $pesovenda->peso_total += $produto->peso;
+            $pesovenda->save();
             return json_encode(2);
         }else{
             return json_encode(3);
@@ -108,7 +116,8 @@ class ProdutoC extends Controller
                 "valor_compra" => $request->valor_compra,
                 "valor_venda"=> $request->valor_venda,
                 "quantidade" => $request->quantidade,
-                "descricao" => $request->descricao    
+                "descricao" => $request->descricao,
+                "peso" => $request->peso_venda    
             ]);
             return redirect(route('produto.view.principal')."?page=".base64_decode($request->url));
         }else{

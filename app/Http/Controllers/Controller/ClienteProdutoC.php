@@ -2,11 +2,12 @@
 
 namespace App\Http\Controllers\Controller;
 
+use PDF;
 use App\Model\Cliente;
 use App\Model\Produto;
 use App\Model\Promocao;
 use App\Model\Telefone;
-use PDF;
+use App\Model\PesoVenda;
 use Illuminate\Http\Request;
 use App\Classes\Configuracao;
 use App\Model\ClienteProduto;
@@ -22,7 +23,8 @@ class ClienteProdutoC extends Controller
     }
     public function viewVenda(Request $request)
     {
-        return view('cliente-produto.venda');
+        $peso_venda = PesoVenda::find(1);
+        return view('cliente-produto.venda', compact('peso_venda'));
     }
     //view da tela de vendas realizadas
     public function viewVendas(Request $request)
@@ -94,14 +96,22 @@ class ClienteProdutoC extends Controller
         ->get();
         // dd($vendas);
         foreach($vendas as $value){
+            $peso_venda = PesoVenda::find(1);
             echo "<ul>";
                 echo "<li>Código: {$value->codigo}</li>";
                 echo "<li>Nome: {$value->nome}</li>";
                 echo "<li>Quantidade Vendida: {$value->quantidade_vendida}</li>";
-                if($value->nv_vl_unitario > 0){
+                echo "<li>Peso Vendido: {$value->peso_vendido}</li>";
+                if($value->nv_vl_unitario > 0 && $value->peso_vendido == 0){
                     echo "<li>Valor: R$ {$value->nv_vl_unitario}</li>";
                     echo "<li>Total: R$ ".$value->nv_vl_unitario * $value->quantidade_vendida."</li>";
-                }else{
+                }else if($value->nv_vl_unitario > 0 && $value->peso_vendido !=0){
+                    echo "<li>Valor: R$ {$value->nv_vl_unitario} p/g </li>";
+                    echo "<li>Total: R$ ".$value->nv_vl_unitario * ($value->peso_vendido * 1000)."</li>";
+                }else if($value->nv_vl_unitario <= 0 && $value->peso_vendido !=0){
+                    echo "<li>Valor: R$ {$value->valor_venda} p/g</li>";
+                    echo "<li>Total: R$ ".$value->valor_venda * ($value->peso_vendido * 1000)."</li>";
+                }else if($value->nv_vl_unitario <= 0 && $value->peso_vendido ==0){
                     echo "<li>Valor: R$ {$value->valor_venda}</li>";
                     echo "<li>Total: R$ ".$value->valor_venda * $value->quantidade_vendida."</li>";
                 }
@@ -140,6 +150,8 @@ class ClienteProdutoC extends Controller
     {
         $cliente = null;
         $promocao = false;
+        $peso_venda = PesoVenda::find(1);
+        $peso_total = 0;
         //verfica se cliente nao foi selecionado
         if($request->cliente_id == null || $request->cliente_id == 0){
             return json_encode("erro 1");
@@ -160,14 +172,23 @@ class ClienteProdutoC extends Controller
             //retorna o produto de acordo com codigo
             $alterar = Produto::where('codigo', $codigos[$i])->first();
             //diminui a quantidade do produto de acordo com a qauntidade a ser vendida
-            $alterar->quantidade = ((int) $valores[$i]) - $alterar->quantidade;
-            $valor_bruto[] += $alterar->valor_compra * (int)$valores[$i];
-            if($alterar->quantidade < 0){
-                $alterar->quantidade *= (-1);
+            if($valores[$i] > 0){
+                $alterar->quantidade = ((int) $valores[$i]) - $alterar->quantidade;
+                $valor_bruto[] += $alterar->valor_compra * (int)$valores[$i];
+                if($alterar->quantidade < 0){
+                    $alterar->quantidade *= (-1);
+                }
+            }else{
+                $valor_bruto[] += $peso_venda->valor_compra * ((double)$request->pesos[$i]*1000);
             }
             //salva alteração
             $alterar->save();
         }
+        //somar peso total
+        for($i=0; $i < count($request->pesos); $i++){
+            $peso_total += (double)$request->pesos[$i]; 
+        }
+
         //verfica descontos,caso haja desconto, não tem promocao
         if($request->desconto != null && $request->desconto != 0){
             $valor_total = $request->valor_total - $request->desconto;
@@ -181,7 +202,9 @@ class ClienteProdutoC extends Controller
         if($request->valor_recebido < $valor_total){
             return json_encode("erro 3");
         }
-
+        if($peso_total > $peso_venda->peso_total){
+            return json_encode("erro 4");
+        }
         // $codigos_unicos = array_unique($codigos, SORT_REGULAR);
         $cont = 0;
         foreach ($codigos as $value) {
@@ -195,7 +218,7 @@ class ClienteProdutoC extends Controller
                 $estado_venda = "andamento";
             }else if($request->forma_pagamento == "fiado"){
                 $estado_venda = "andamento";
-            }else if ($request->forma_pagamento == "A vista" || ($request->forma_pagamento == "cartão" && $request->parcelamento == 0 )) {
+            }else if ($request->forma_pagamento == "A vista" || ($request->forma_pagamento == "cartão" && $request->parcelamento == 0 ) || $request->forma_pagamento == "permuta") {
                 $estado_venda = "concluida";
             }
             DB::statement('SET FOREIGN_KEY_CHECKS=0;');
@@ -208,19 +231,24 @@ class ClienteProdutoC extends Controller
                 "forma_pagamento" => $request->forma_pagamento,
                 "parcelamento" => $request->parcelamento,
                 "estado_compra" => $estado_venda,
+                "peso_vendido" => $request->pesos[$cont],
                 "quantidade_vendida" => $valores[$cont++],
                 "descricao" => $request->descricao,
                 "cliente_anonimo" => ""
+                
             ]);
             DB::statement('SET FOREIGN_KEY_CHECKS=1;');
         }
+        $peso_venda->peso_total = $peso_venda->peso_total - (double)$peso_total; 
+        $peso_venda->save();
         
 
         if($request->cliente_id != null && $request->cliente_id > 1){
             ClientePromocao::verficarPromocao($request); 
         }
         if($request->valor_recebido >= $valor_total){
-            return json_encode(($request->valor_recebido - $valor_total));
+            $calculo = $request->valor_recebido - $valor_total;
+            return json_encode(number_format($calculo, 3, '.', ','));
         }
         //falta desabilitar foreng keys
         
@@ -228,6 +256,7 @@ class ClienteProdutoC extends Controller
     //emitir comprovante de venda
     public function comprovanteVenda(Request $request)
     {
+        $peso_venda = PesoVenda::find(1);
         $vendas = ClienteProduto::leftJoin('cliente', 'cliente_produto.cliente_id', '=', 'cliente.id')
         ->leftJoin('produto', 'cliente_produto.produto_id', '=', 'produto.id')
         ->select('cliente.nome','cliente.id as id_cliente','cliente_produto.*', 'produto.*')
@@ -236,7 +265,7 @@ class ClienteProdutoC extends Controller
         ->orderBy('cliente_produto.created_at', 'desc')
         ->get();
         $cliente = Cliente::find($request->id);
-        $pdf = PDF::loadView('cliente-produto.comprovante_pdf', compact('vendas', 'cliente'));
+        $pdf = PDF::loadView('cliente-produto.comprovante_pdf', compact('vendas', 'cliente', 'peso_venda'));
         $pdf->setPaper('A6', 'portrait');
         return $pdf->stream('comprovante_venda.pdf');
     }
@@ -250,11 +279,14 @@ class ClienteProdutoC extends Controller
         ->where('cliente_produto.created_at', $request->dia)
         ->orderBy('cliente_produto.created_at', 'desc')
         ->get();
+        $peso_venda = PesoVenda::find(1);
         // dd($vendas);
         foreach($vendas as $value){
             $produto = Produto::where('codigo', $value->codigo)->first();
             $produto->quantidade += $value->quantidade_vendida;
             $produto->save();
+            $peso_venda->peso_total += $value->peso_vendido;
+            $peso_venda->save();
             ClienteProduto::where('id', $value->id_venda)->forceDelete();
         }
         return json_encode(true);

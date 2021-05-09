@@ -68,13 +68,27 @@
                             <span class="badge" id="aniversariantes-dia" style="background-color:orangered ">0</span>
                         </a>
                     </li>
+                    @if(session('tipo') == session('tipo_users.0'))
                     <li>
                         <a href="{{route('relatorio.inicio')}}"><i class="fas fa-file-invoice-dollar"></i>Relatório </a>
                     </li>
+                    @endif
+                    @if(session('tipo') == session('tipo_users.0'))
+                    <li>
+                        <a href="{{route('peso.ajax.revisarPeso')}}" id="reconfigurar-peso"><i class="fas fa-sync-alt"></i>Reconfigurar Peso </a>
+                    </li>
+                    @endif
+
                     <li>
                         @if(isset($_SERVER['HTTP_REFERER']))
                         <a href="{{$_SERVER['HTTP_REFERER']}}"><i class="fas fa-arrow-alt-circle-left"></i> Voltar</a>
                         @endif
+                    </li>
+
+                    <li>
+                        <a href="#" style=" color:red" id="info_caixa">
+                            Caixa fechado
+                        </a>
                     </li>
                     
                 </ul>
@@ -150,7 +164,7 @@
                 console.log(e);
             }
         });
-    },3000);
+    },10000);
 
     $.ajax({
         type: 'GET',
@@ -163,6 +177,88 @@
         }
     });
 
+    $("a#reconfigurar-peso").on('click', function(e){
+        e.preventDefault();
+        $("div#load-page").fadeIn('fast');
+        $.ajax({
+        type: 'PUT',
+        url: $(this).attr('href'),
+        data:{
+            "_token": "{{ csrf_token() }}"
+        },
+        complete: function(e){
+            $("div#load-page").fadeOut('fast');
+        },
+        success: function(e){
+            if(typeof e == "string"){
+                $.msgbox({
+                'message': "Novo peso atualizado para "+e+" Kg",
+                'type': "info",
+                });
+            }else{
+                $.msgbox({
+                'message': "Tipo de retorno '"+typeof e+"' inesperado",
+                'type': "info",
+                });
+            }
+
+        },
+        error: function(e){
+             console.log(e);
+        }
+    });
+    });
+
+    //comentar requisição abaixo caso loja nao use peso igual logica do açai
+    $tempo = localStorage.setItem('tempo_peso_alerta', 60000);
+    setInterval(function () {
+        $.ajax({
+            type: 'GET',
+            url: "{{route('peso.ajax.alert')}}",
+            success: function(e){
+                if(e != "false" && e > 0){
+                    $.msgbox({
+                    'message': "O peso total esta em estado de alerta. Atingindo a quantidade de "+e+"Kg "
+                    });
+                }else if(e == 0){
+                    $.msgbox({
+                    'message': "O peso total atingiu a quantidade de 0Kg! Solicite reabastecimento! Vendas Bloqueadas!",
+                    'type': "error",
+                    });
+                }else{
+                    //peso esta em ordem
+                }
+            },
+            error: function(e){
+                console.log(e);
+            }
+        });
+    },localStorage.getItem('tempo_peso_alerta'));
+
+
+
+    $.ajax({
+        type:'GET',
+        url: "{{route('caixa.check')}}",
+        success:function(e){
+            if(e == "true"){
+                $("#abrir_venda").show();
+                $("a#info_caixa").css({'color':'green'});
+                $("a#info_caixa").html('Caixa Aberto');
+            }else if(e == "false"){
+                $("#abrir_venda").hide();
+                $("a#info_caixa").css({'color':'red'});
+                $("a#info_caixa").html('Caixa Fechado');
+            }else{
+                $("#abrir_venda").hide();
+                // alert("nenhum dado cadastrado");
+            }
+            console.log(e);
+        },
+        error: function(e){
+            console.log(e);
+        }
+    });
     </script>
 </body>
 </html>

@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Controller;
 
 use PDF;
 use DateTime;
+use App\Model\PesoVenda;
 use Illuminate\Http\Request;
 use App\Model\ClienteProduto;
 use Illuminate\Support\Facades\DB;
@@ -31,6 +32,7 @@ class RelatorioC extends Controller
         $valor_total = 0;
         $valor_bruto = 0;
         $valor_lucro = 0;
+        $peso_venda = PesoVenda::find(1);
         //true apenas para parselas, false para acumular as parcelas
         $parcelas = true;
         foreach($vendas as $venda){
@@ -41,7 +43,11 @@ class RelatorioC extends Controller
                 if(strtotime($data_final_parcelamento) <= strtotime($request->data_final)){
                     $valor_total += $venda->valor_total;
                     $valor_bruto += $venda->soma;
-                    $valor_lucro += $valor_total - $valor_bruto;
+                    /**
+                     * antes = $valor_lucro += $valor_total - $valor_bruto; 
+                     */
+                    $valor_lucro = $valor_total - $valor_bruto;
+                    // dd("2");
                 }else if(strtotime($data_final_parcelamento) > strtotime($request->data_final)){//cartao nao concluiu todas as parcelas
                     // dd("aq2");
                     //pegar quantidade de parcelas que falta(data atual - data final)
@@ -72,22 +78,30 @@ class RelatorioC extends Controller
 
                     $valor_total += $lucro_obtido;
                     $valor_bruto += $lucro_bruto_obitido;
-                    $valor_lucro += $lucro_oficial;
+                    /**
+                     * antes = $valor_lucro += $valor_total - $valor_bruto; 
+                     */
+                    $valor_lucro = $lucro_oficial;
                     // dd($parcelas_concluidas);
-    
+                    // dd("3");
                 }
             }else if($venda->forma_pagamento == "fiado" && $venda->estado_compra == "andamento"){
                 $valor_fiados_anadamento += $venda->valor_total;
-            }else{
+            }else if($venda->forma_pagamento == "A vista"){
                 $valor_total += $venda->valor_total;
                 $valor_bruto += $venda->soma;
-                $valor_lucro += $valor_total - $valor_bruto;
+                /**
+                     * antes = $valor_lucro += $valor_total - $valor_bruto; 
+                */
+                $valor_lucro = $valor_total - $valor_bruto;
+                // echo "$valor_total - $valor_bruto = $valor_lucro <br>";
             }
         }
-
+        // dd("aq");
+        
         $vendas_separadas = ClienteProduto::join('cliente', 'cliente_produto.cliente_id', '=', 'cliente.id')
         ->join('produto', 'cliente_produto.produto_id', '=', 'produto.id')
-        ->select('cliente.nome','cliente.id as id_cliente','cliente_produto.id as id_venda','cliente_produto.*', 'produto.*')
+        ->select('cliente.nome','cliente.id as id_cliente','cliente_produto.id as id_venda','cliente_produto.*', 'produto.*', 'cliente_produto.created_at as criado')
         ->where("forma_pagamento", "!=","fiado")
         ->orWhere('estado_compra', 'concluida')
         ->whereDate('cliente_produto.created_at',' >= ',$request->data_inicio)
@@ -96,7 +110,7 @@ class RelatorioC extends Controller
         ->get();
         $vendas_fiados_andamento = ClienteProduto::join('cliente', 'cliente_produto.cliente_id', '=', 'cliente.id')
         ->join('produto', 'cliente_produto.produto_id', '=', 'produto.id')
-        ->select('cliente_produto.id as id_venda','cliente_produto.*', 'produto.*')
+        ->select('cliente_produto.id as id_venda','cliente_produto.*', 'produto.*', 'cliente_produto.created_at as criado')
         ->whereDate('cliente_produto.created_at',' >= ',$request->data_inicio)
         ->whereDate('cliente_produto.created_at',' <= ',$request->data_final)
         ->where("forma_pagamento", "fiado")
@@ -106,9 +120,10 @@ class RelatorioC extends Controller
         //retorna pdf
         $data_inicio = $request->data_inicio;
         $data_final = $request->data_final;
-        $pdf = PDF::loadView('cliente-produto.relatorioPdf', compact('valor_total', 'valor_fiados_anadamento','vendas_separadas', 'vendas_fiados_andamento', 'data_inicio', 'data_final','valor_bruto', 'valor_lucro'));
+        $peso_banco = PesoVenda::find(1);
+        $pdf = PDF::loadView('cliente-produto.relatorioPdf', compact('valor_total', 'valor_fiados_anadamento','vendas_separadas', 'vendas_fiados_andamento', 'data_inicio', 'data_final','valor_bruto', 'valor_lucro', 'peso_banco'));
 
         $pdf->setPaper('A4', 'portrait');
-        return $pdf->stream('relatório_'.date('m', strtotime($request->data_inicio)).'-'.date('m', strtotime($request->data_final)).'/'.date('Y', strtotime($request->data_final)).'pdf');
+        return $pdf->stream('relatório_'.date('m', strtotime($request->data_inicio)).'-'.date('m', strtotime($request->data_final)).'/'.date('Y', strtotime($request->data_final)).'.pdf');
     }
 }

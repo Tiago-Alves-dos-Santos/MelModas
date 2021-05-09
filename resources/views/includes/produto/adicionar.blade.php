@@ -16,12 +16,18 @@ div#produto-existente h3{
     <div class="form-row">
         <div class="col-md-12">
             <label>Quantidade a ser adicionada: <span class="text-danger">*</span></label>
-            <input type="number" name="quantidade" step="1" min="1" required class="form-control"/>
+            <input type="number" name="quantidade" step="1" min="1" class="form-control"/>
         </div>
     </div>
     <div class="form-row">
         <div class="col-md-12">
-            <input type="submit" value="Adicionar" class="btn btn-success btn-block" style="margin-top: 30px; margin-bottom: 30px"/>
+            <label>Alterar peso(Kg): <span class="text-danger">*</span></label>
+            <input type="number" value="{{$produto->peso}}" name="peso_venda" step="0.001" min="0.001"  class="form-control"/>
+        </div>
+    </div>
+    <div class="form-row">
+        <div class="col-md-12">
+            <input type="submit" value="Salvar" class="btn btn-success btn-block" style="margin-top: 30px; margin-bottom: 30px"/>
         </div>
     </div>
 </form>
@@ -35,13 +41,26 @@ div#produto-existente h3{
                     <ul style="list-style-type: none">
                         <li><span style="font-weight: bold">Código:</span> {{$produto->codigo}}</li>
                         <li><span style="font-weight: bold">Marca:</span> {{$produto->marca}}</li>
+                        @if($produto->peso != null)
+                        <li><span style="font-weight: bold">Peso:</span> {{$produto->peso}}</li>
+                        @else
                         <li><span style="font-weight: bold">Quantidade:</span> {{$produto->quantidade}}</li>
+                        @endif
+                        
                     </ul>
                 </div>
                 <div class="col-md-6">
                     <ul style="list-style-type: none">
+                        @if ($produto->peso == null)
                         <li><span style="font-weight: bold">Valor(Compra) R$:</span> {{$produto->valor_compra}}</li>
                         <li><span style="font-weight: bold">Valor(Venda) R$:</span> {{$produto->valor_venda}}</li>
+                        @else
+                        <li><span style="font-weight: bold">Valor Grama(Compra) R$:</span> {{$peso_venda->valor_compra}}</li>
+                        <li><span style="font-weight: bold">Valor Grama(Venda) R$:</span> {{$peso_venda->valor_venda}}</li>  
+                        @endif
+                        
+
+                        
                     </ul>
                 </div>
             </div>

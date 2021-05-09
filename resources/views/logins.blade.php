@@ -49,7 +49,7 @@
 					$link .= "$ipLocal:$porta";
 					@endphp
 					<div style="width: 100%; display: flex; justify-content: center; flex-wrap: wrap">
-						{{QrCode::encoding('UTF-8')->size(125)->style('round')->color(247, 7, 195)->generate($link)}}
+						{{QrCode::encoding('UTF-8')->size(125)->style('round')->color(255, 91, 3)->generate($link)}}
 					</div>
 					<div style="width: 100%">
 						<h5 class="text-success" style="text-align: center">Abra pelo celular!</h5>

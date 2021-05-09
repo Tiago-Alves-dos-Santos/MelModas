@@ -4,6 +4,7 @@ namespace App\Classes;
 class Configuracao
 {
     const PAGINAS = 10;
+    const ALERTA_PESO = 50;
 
     public static function mapPaginate($consultaPaginate){
 
